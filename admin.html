@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة التحكم | برشتا بيتزا</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+*{font-family:'Cairo',sans-serif;box-sizing:border-box;margin:0;padding:0;}
+:root{--red:#CC0000;--red-dark:#A30000;}
+body{background:#F1F5F9;overflow:hidden;}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-thumb{background:var(--red);border-radius:5px;}
+
+/* Layout */
+.layout{display:flex;height:100vh;overflow:hidden;}
+.sidebar{width:240px;background:#111827;flex-shrink:0;display:flex;flex-direction:column;overflow-y:auto;transition:transform .3s;}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;}
+.topbar{background:white;padding:14px 20px;border-bottom:1px solid #E5E7EB;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;box-shadow:0 1px 8px rgba(0,0,0,.06);}
+.content{flex:1;overflow-y:auto;padding:24px;}
+
+/* Sidebar */
+.sb-logo{padding:20px 16px;border-bottom:1px solid rgba(255,255,255,.08);}
+.nav-item{display:flex;align-items:center;gap:10px;padding:11px 16px;cursor:pointer;color:#9CA3AF;font-size:13px;font-weight:700;transition:all .2s;border-right:3px solid transparent;}
+.nav-item:hover{background:rgba(255,255,255,.05);color:#E5E7EB;}
+.nav-item.active{background:rgba(204,0,0,.12);color:#FF6666;border-right-color:#CC0000;}
+.nav-item i{width:18px;font-size:15px;text-align:center;}
+.nav-group{padding:10px 16px 4px;font-size:10px;font-weight:800;color:#4B5563;text-transform:uppercase;letter-spacing:.05em;}
+
+/* Cards */
+.card{background:white;border-radius:14px;box-shadow:0 2px 12px rgba(0,0,0,.06);padding:20px;}
+.item-card{background:white;border-radius:12px;border:2px solid #E5E7EB;transition:all .25s;overflow:hidden;}
+.item-card:hover{border-color:#FFBBBB;box-shadow:0 6px 20px rgba(204,0,0,.1);transform:translateY(-2px);}
+.item-img{height:130px;display:flex;align-items:center;justify-content:center;font-size:60px;position:relative;overflow:hidden;}
+.item-img img{width:100%;height:100%;object-fit:cover;}
+
+/* Buttons */
+.btn{border:none;border-radius:8px;padding:8px 16px;font-family:'Cairo',sans-serif;font-weight:700;cursor:pointer;font-size:13px;display:inline-flex;align-items:center;gap:6px;transition:all .2s;}
+.btn-primary{background:var(--red);color:white;}
+.btn-primary:hover{background:var(--red-dark);}
+.btn-sm{padding:6px 12px;font-size:12px;border-radius:6px;}
+.btn-ghost{background:#F1F5F9;color:#374151;}
+.btn-ghost:hover{background:#E2E8F0;}
+.btn-danger{background:#DC2626;color:white;}
+.btn-danger:hover{background:#B91C1C;}
+.btn-success{background:#16A34A;color:white;}
+.btn-success:hover{background:#15803D;}
+
+/* Form */
+.form-group{margin-bottom:14px;}
+.label{display:block;font-weight:700;font-size:13px;margin-bottom:5px;color:#374151;}
+.input{border:2px solid #E5E7EB;border-radius:8px;padding:9px 12px;width:100%;font-family:'Cairo',sans-serif;font-size:14px;transition:border-color .2s;background:white;color:#111;}
+.input:focus{border-color:var(--red);outline:none;box-shadow:0 0 0 3px rgba(204,0,0,.1);}
+textarea.input{resize:vertical;min-height:70px;}
+
+/* Upload area */
+.upload-zone{border:2px dashed #CBD5E1;border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all .2s;background:#F8FAFC;}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--red);background:#FFF5F5;}
+.upload-zone.has-img{border-style:solid;border-color:#22C55E;background:white;}
+.upload-preview{max-height:120px;max-width:100%;border-radius:8px;object-fit:cover;}
+
+/* Modal */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);z-index:500;display:none;align-items:center;justify-content:center;}
+.overlay.show{display:flex;}
+.modal{background:white;border-radius:20px;width:100%;max-width:560px;max-height:92vh;overflow-y:auto;margin:16px;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.modal{animation:fadeUp .3s ease forwards;}
+.modal-header{padding:20px 24px 16px;border-bottom:1px solid #E5E7EB;display:flex;align-items:center;justify-content:space-between;}
+.modal-body{padding:20px 24px;}
+.modal-footer{padding:16px 24px;border-top:1px solid #E5E7EB;display:flex;gap:10px;justify-content:flex-end;}
+
+/* Color picker */
+.color-wrap{display:flex;align-items:center;gap:8px;border:2px solid #E5E7EB;border-radius:8px;padding:5px 10px;background:white;}
+.color-wrap:focus-within{border-color:var(--red);}
+.color-wrap input[type=color]{border:none;width:32px;height:32px;border-radius:6px;cursor:pointer;padding:2px;background:none;}
+.color-wrap input[type=text]{border:none;flex:1;font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;outline:none;min-width:0;}
+
+/* Chip/tag */
+.chip{display:inline-flex;align-items:center;gap:5px;background:#FEF2F2;border:1px solid #FECACA;border-radius:50px;padding:3px 10px;font-size:12px;font-weight:700;color:#991B1B;margin:3px;}
+.chip button{background:none;border:none;cursor:pointer;color:#DC2626;font-size:11px;padding:0;line-height:1;}
+
+/* Stat card */
+.stat{background:white;border-radius:12px;padding:18px;border-right:4px solid;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+
+/* Topping row */
+.topping-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:10px;background:#F9FAFB;margin-bottom:8px;border:1px solid #E5E7EB;}
+
+/* Notification */
+#notif{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:9999;display:none;}
+.notif-msg{background:#111827;color:white;padding:10px 20px;border-radius:50px;font-size:13px;font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,.3);}
+@keyframes notifIn{from{opacity:0;top:0}to{opacity:1;top:20px}}
+.notif-msg{animation:notifIn .3s ease;}
+
+/* Grid helpers */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.grid4{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;}
+@media(max-width:600px){.grid2{grid-template-columns:1fr;}.grid3{grid-template-columns:1fr 1fr;}}
+
+/* Branding preview */
+.brand-preview{border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.15);}
+.brand-preview-bar{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;}
+
+/* Section hide/show */
+.admin-sec{display:none;}
+.admin-sec.active{display:block;}
+
+/* Mobile sidebar overlay */
+.sb-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:498;}
+@media(max-width:768px){
+  .sidebar{position:fixed;right:0;top:0;height:100%;z-index:499;transform:translateX(100%);}
+  .sidebar.open{transform:translateX(0);}
+  .sb-backdrop.show{display:block;}
+}
+
+/* Empty state */
+.empty-state{text-align:center;padding:60px 20px;color:#9CA3AF;}
+.empty-state .icon{font-size:56px;margin-bottom:12px;}
+</style>
+</head>
+<body>
+
+<div class="layout">
+<!-- ========== SIDEBAR ========== -->
+<aside class="sidebar" id="sidebar">
+  <div class="sb-logo">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div id="sb-logo-img" style="width:38px;height:38px;background:linear-gradient(135deg,#CC0000,#FF4444);border-radius:50%;display:flex;align-items:center;justify-content:center;">
+        <i class="fas fa-pizza-slice" style="color:white;font-size:16px;"></i>
+      </div>
+      <div>
+        <div id="sb-name" style="color:white;font-weight:900;font-size:15px;line-height:1.1;">برشتا بيتزا</div>
+        <div style="color:#6B7280;font-size:10px;">لوحة التحكم</div>
+      </div>
+    </div>
+  </div>
+
+  <nav style="flex:1;padding:12px 0;">
+    <div class="nav-group">عام</div>
+    <div class="nav-item active" id="nav-dashboard" onclick="showSec('dashboard')"><i class="fas fa-chart-pie"></i>لوحة التحكم</div>
+    <div class="nav-item" id="nav-branding" onclick="showSec('branding')"><i class="fas fa-palette"></i>الهوية البصرية</div>
+
+    <div class="nav-group" style="margin-top:8px;">القائمة</div>
+    <div class="nav-item" id="nav-pizza" onclick="showSec('pizza')"><i class="fas fa-pizza-slice"></i>البيتزا</div>
+    <div class="nav-item" id="nav-appetizers" onclick="showSec('appetizers')"><i class="fas fa-drumstick-bite"></i>المقبلات</div>
+    <div class="nav-item" id="nav-drinks" onclick="showSec('drinks')"><i class="fas fa-glass-water"></i>المشروبات</div>
+    <div class="nav-item" id="nav-desserts" onclick="showSec('desserts')"><i class="fas fa-ice-cream"></i>الحلويات</div>
+    <div class="nav-item" id="nav-offers" onclick="showSec('offers')"><i class="fas fa-percent"></i>العروض</div>
+
+    <div class="nav-group" style="margin-top:8px;">الإضافات</div>
+    <div class="nav-item" id="nav-extras" onclick="showSec('extras')"><i class="fas fa-plus-circle"></i>الإضافات المدفوعة</div>
+  </nav>
+
+  <div style="padding:16px;border-top:1px solid rgba(255,255,255,.08);">
+    <a href="index.html" target="_blank" style="display:flex;align-items:center;gap:8px;color:#9CA3AF;font-size:12px;font-weight:700;text-decoration:none;padding:8px 0;" onmouseover="this.style.color='#FF6666'" onmouseout="this.style.color='#9CA3AF'">
+      <i class="fas fa-external-link-alt"></i> عرض الموقع
+    </a>
+  </div>
+</aside>
+
+<!-- ========== MAIN ========== -->
+<div class="main">
+  <!-- Top bar -->
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <button onclick="toggleSidebar()" style="background:none;border:none;cursor:pointer;font-size:18px;color:#6B7280;display:none;" id="menu-toggle"><i class="fas fa-bars"></i></button>
+      <h1 id="page-title" style="font-size:18px;font-weight:800;color:#111827;">لوحة التحكم</h1>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="btn btn-success btn-sm" onclick="exportData()"><i class="fas fa-download"></i>تصدير</button>
+      <label class="btn btn-ghost btn-sm" style="cursor:pointer;"><i class="fas fa-upload"></i>استيراد<input type="file" accept=".json" style="display:none;" onchange="importData(event)"></label>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content" id="content">
+
+    <!-- ===== DASHBOARD ===== -->
+    <div class="admin-sec active" id="sec-dashboard">
+      <div style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));display:grid;gap:16px;margin-bottom:24px;" id="stats-grid"></div>
+      <div class="card" style="margin-bottom:20px;">
+        <div style="font-weight:800;font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:8px;"><i class="fas fa-info-circle" style="color:#CC0000;"></i> معلومات سريعة</div>
+        <div style="color:#6B7280;font-size:13px;line-height:2;">
+          • كل التغييرات تُحفظ تلقائياً في المتصفح وتظهر فوراً على الموقع<br>
+          • استخدم "تصدير" لحفظ نسخة احتياطية من البيانات<br>
+          • حجم الصور يؤثر على سرعة الموقع، يُنصح بصور أقل من 300KB
+        </div>
+      </div>
+      <div class="card">
+        <div style="font-weight:800;font-size:15px;margin-bottom:16px;">⚡ وصول سريع</div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;">
+          <button class="btn btn-primary btn-sm" onclick="showSec('pizza');openAddModal('pizza')"><i class="fas fa-plus"></i>إضافة بيتزا</button>
+          <button class="btn btn-ghost btn-sm" onclick="showSec('appetizers');openAddModal('appetizers')"><i class="fas fa-plus"></i>إضافة مقبل</button>
+          <button class="btn btn-ghost btn-sm" onclick="showSec('drinks');openAddModal('drinks')"><i class="fas fa-plus"></i>إضافة مشروب</button>
+          <button class="btn btn-ghost btn-sm" onclick="showSec('desserts');openAddModal('desserts')"><i class="fas fa-plus"></i>إضافة حلوى</button>
+          <button class="btn btn-ghost btn-sm" onclick="showSec('branding')"><i class="fas fa-palette"></i>تعديل الهوية</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== BRANDING ===== -->
+    <div class="admin-sec" id="sec-branding">
+      <div style="display:grid;grid-template-columns:1fr 380px;gap:20px;" id="branding-layout">
+        <div class="card">
+          <div style="font-weight:800;font-size:15px;margin-bottom:20px;display:flex;align-items:center;gap:8px;"><i class="fas fa-palette" style="color:#CC0000;"></i>إعدادات الهوية البصرية</div>
+
+          <!-- Logo Upload -->
+          <div class="form-group">
+            <label class="label">الشعار (Logo)</label>
+            <div class="upload-zone" id="logo-zone" onclick="document.getElementById('logo-file').click()" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleLogoDrop(event)">
+              <div id="logo-preview-wrap">
+                <i class="fas fa-image" style="font-size:32px;color:#9CA3AF;margin-bottom:8px;display:block;"></i>
+                <div style="font-size:13px;color:#6B7280;">اضغط أو اسحب لرفع الشعار</div>
+                <div style="font-size:11px;color:#9CA3AF;margin-top:4px;">PNG, JPG, SVG — max 2MB</div>
+              </div>
+            </div>
+            <input type="file" id="logo-file" accept="image/*" style="display:none;" onchange="handleLogoUpload(event)">
+            <button class="btn btn-ghost btn-sm" onclick="removeLogo()" style="margin-top:6px;" id="remove-logo-btn" style="display:none;"><i class="fas fa-trash"></i>حذف الشعار</button>
+          </div>
+
+          <div class="grid2">
+            <div class="form-group">
+              <label class="label">اسم المطعم (عربي)</label>
+              <input class="input" id="b-name" value="" placeholder="برشتا بيتزا" oninput="previewBranding()">
+            </div>
+            <div class="form-group">
+              <label class="label">الاسم (إنجليزي)</label>
+              <input class="input" id="b-name-en" value="" placeholder="Breshta Pizza" oninput="previewBranding()">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="label">الشعار النصي (Tagline)</label>
+            <input class="input" id="b-tagline" placeholder="أفضل بيتزا في عمّان!" oninput="previewBranding()">
+          </div>
+
+          <div class="grid2" style="margin-bottom:14px;">
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="label">اللون الرئيسي</label>
+              <div class="color-wrap" id="primary-wrap">
+                <input type="color" id="b-primary" value="#CC0000" oninput="syncColor('primary');previewBranding()">
+                <input type="text" id="b-primary-text" value="#CC0000" maxlength="7" oninput="syncColorText('primary');previewBranding()">
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="label">لون الخلفية الداكنة</label>
+              <div class="color-wrap" id="secondary-wrap">
+                <input type="color" id="b-secondary" value="#1a1a1a" oninput="syncColor('secondary');previewBranding()">
+                <input type="text" id="b-secondary-text" value="#1a1a1a" maxlength="7" oninput="syncColorText('secondary');previewBranding()">
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="label">لون التميّز (Accent)</label>
+            <div class="color-wrap" id="accent-wrap" style="max-width:200px;">
+              <input type="color" id="b-accent" value="#FFD700" oninput="syncColor('accent');previewBranding()">
+              <input type="text" id="b-accent-text" value="#FFD700" maxlength="7" oninput="syncColorText('accent');previewBranding()">
+            </div>
+          </div>
+
+          <button class="btn btn-primary" onclick="saveBranding()" style="width:100%;padding:12px;font-size:15px;justify-content:center;">
+            <i class="fas fa-save"></i> حفظ الهوية البصرية
+          </button>
+        </div>
+
+        <!-- Live Preview -->
+        <div>
+          <div style="font-weight:800;font-size:14px;margin-bottom:12px;color:#374151;">معاينة مباشرة</div>
+          <div class="brand-preview" id="brand-preview-box">
+            <div class="brand-preview-bar" id="bp-bar" style="background:#1a1a1a;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div id="bp-logo" style="width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#CC0000;">
+                  <i class="fas fa-pizza-slice" style="color:white;font-size:14px;"></i>
+                </div>
+                <div>
+                  <div id="bp-name" style="color:white;font-weight:900;font-size:14px;">برشتا بيتزا</div>
+                  <div id="bp-name-en" style="font-size:10px;color:#CC0000;">Breshta Pizza</div>
+                </div>
+              </div>
+              <div id="bp-btn" style="background:#CC0000;color:white;border-radius:50px;padding:6px 14px;font-size:11px;font-weight:700;">السلة</div>
+            </div>
+            <div id="bp-hero" style="background:linear-gradient(135deg,#0d0d0d,#6B0000,#CC0000);padding:24px;text-align:center;">
+              <div id="bp-tagline" style="color:#FFD700;font-weight:900;font-size:16px;margin-bottom:6px;">أفضل بيتزا في عمّان!</div>
+              <div style="color:rgba(255,255,255,.7);font-size:12px;">اطلب الآن من أقرب فرع</div>
+              <div id="bp-cta" style="display:inline-block;background:#CC0000;color:white;padding:8px 20px;border-radius:8px;font-size:12px;font-weight:700;margin-top:12px;">اطلب الآن</div>
+            </div>
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:#9CA3AF;text-align:center;">التغييرات تظهر فوراً على الموقع بعد الحفظ</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== PIZZA ===== -->
+    <div class="admin-sec" id="sec-pizza">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+        <h2 style="font-size:18px;font-weight:800;">🍕 إدارة البيتزا</h2>
+        <button class="btn btn-primary" onclick="openAddModal('pizza')"><i class="fas fa-plus"></i>إضافة بيتزا</button>
+      </div>
+      <div class="grid4" id="grid-pizza"></div>
+    </div>
+
+    <!-- ===== APPETIZERS ===== -->
+    <div class="admin-sec" id="sec-appetizers">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+        <h2 style="font-size:18px;font-weight:800;">🍟 إدارة المقبلات</h2>
+        <button class="btn btn-primary" onclick="openAddModal('appetizers')"><i class="fas fa-plus"></i>إضافة مقبل</button>
+      </div>
+      <div class="grid4" id="grid-appetizers"></div>
+    </div>
+
+    <!-- ===== DRINKS ===== -->
+    <div class="admin-sec" id="sec-drinks">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+        <h2 style="font-size:18px;font-weight:800;">🥤 إدارة المشروبات</h2>
+        <button class="btn btn-primary" onclick="openAddModal('drinks')"><i class="fas fa-plus"></i>إضافة مشروب</button>
+      </div>
+      <div class="grid4" id="grid-drinks"></div>
+    </div>
+
+    <!-- ===== DESSERTS ===== -->
+    <div class="admin-sec" id="sec-desserts">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+        <h2 style="font-size:18px;font-weight:800;">🍰 إدارة الحلويات</h2>
+        <button class="btn btn-primary" onclick="openAddModal('desserts')"><i class="fas fa-plus"></i>إضافة حلوى</button>
+      </div>
+      <div class="grid4" id="grid-desserts"></div>
+    </div>
+
+    <!-- ===== OFFERS ===== -->
+    <div class="admin-sec" id="sec-offers">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+        <h2 style="font-size:18px;font-weight:800;">🔥 إدارة العروض</h2>
+        <button class="btn btn-primary" onclick="openAddModal('offers')"><i class="fas fa-plus"></i>إضافة عرض</button>
+      </div>
+      <div class="grid4" id="grid-offers"></div>
+    </div>
+
+    <!-- ===== EXTRAS ===== -->
+    <div class="admin-sec" id="sec-extras">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+        <h2 style="font-size:18px;font-weight:800;">➕ الإضافات المدفوعة للبيتزا</h2>
+        <button class="btn btn-primary" onclick="openAddExtraModal()"><i class="fas fa-plus"></i>إضافة جديدة</button>
+      </div>
+      <div class="card" style="margin-bottom:20px;">
+        <p style="font-size:13px;color:#6B7280;line-height:1.7;">هذه الإضافات تظهر للزبون عند تخصيص البيتزا. يمكنه إضافة أي منها بالسعر المحدد.</p>
+      </div>
+      <div id="extras-list"></div>
+    </div>
+
+  </div><!-- end content -->
+</div><!-- end main -->
+</div><!-- end layout -->
+
+<!-- Sidebar backdrop mobile -->
+<div class="sb-backdrop" id="sb-backdrop" onclick="toggleSidebar()"></div>
+
+<!-- ===== EDIT ITEM MODAL ===== -->
+<div class="overlay" id="edit-overlay" onclick="closeEditModal()">
+<div class="modal" onclick="event.stopPropagation()">
+  <div class="modal-header">
+    <h3 style="font-weight:800;font-size:16px;" id="edit-modal-title">تعديل عنصر</h3>
+    <button onclick="closeEditModal()" style="background:none;border:none;cursor:pointer;font-size:18px;color:#9CA3AF;"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="modal-body">
+    <!-- Image upload -->
+    <div class="form-group">
+      <label class="label">الصورة</label>
+      <div class="upload-zone" id="item-img-zone" onclick="document.getElementById('item-img-file').click()" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleItemImgDrop(event)">
+        <div id="item-img-preview">
+          <i class="fas fa-cloud-upload-alt" style="font-size:28px;color:#9CA3AF;display:block;margin-bottom:6px;"></i>
+          <div style="font-size:12px;color:#6B7280;">اضغط أو اسحب الصورة هنا</div>
+        </div>
+      </div>
+      <input type="file" id="item-img-file" accept="image/*" style="display:none;" onchange="handleItemImgUpload(event)">
+      <button class="btn btn-ghost btn-sm" onclick="clearItemImg()" style="margin-top:6px;"><i class="fas fa-trash"></i>إزالة الصورة</button>
+    </div>
+
+    <div class="grid2">
+      <div class="form-group">
+        <label class="label">الاسم (عربي) *</label>
+        <input class="input" id="f-name" placeholder="مثال: بيبروني">
+      </div>
+      <div class="form-group">
+        <label class="label">الاسم (إنجليزي)</label>
+        <input class="input" id="f-name-en" placeholder="Pepperoni">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="label">الوصف</label>
+      <textarea class="input" id="f-desc" placeholder="وصف مختصر للمنتج..."></textarea>
+    </div>
+
+    <div class="grid2">
+      <div class="form-group">
+        <label class="label">السعر (د.أ) *</label>
+        <input class="input" id="f-price" type="number" step="0.25" min="0" placeholder="0.00">
+      </div>
+      <div class="form-group">
+        <label class="label">إيموجي (اختياري)</label>
+        <input class="input" id="f-emoji" placeholder="🍕" style="font-size:20px;">
+      </div>
+    </div>
+
+    <!-- Badge (offers only) -->
+    <div id="badge-group" style="display:none;" class="form-group">
+      <label class="label">شارة (مثال: الأكثر طلباً)</label>
+      <input class="input" id="f-badge" placeholder="الأكثر طلباً">
+    </div>
+
+    <!-- Card gradient colors -->
+    <div class="form-group">
+      <label class="label">ألوان بطاقة القائمة</label>
+      <div class="grid2">
+        <div class="color-wrap"><input type="color" id="f-color1" value="#7f1d1d" oninput="syncFColor(1)"><input type="text" id="f-color1-text" value="#7f1d1d" maxlength="7" oninput="syncFColorText(1)"><span style="font-size:11px;color:#9CA3AF;">من</span></div>
+        <div class="color-wrap"><input type="color" id="f-color2" value="#CC0000" oninput="syncFColor(2)"><input type="text" id="f-color2-text" value="#CC0000" maxlength="7" oninput="syncFColorText(2)"></div>
+      </div>
+    </div>
+
+    <!-- Pizza toppings (shown only for pizza category) -->
+    <div id="toppings-section" style="display:none;">
+      <div style="border-top:1px solid #E5E7EB;padding-top:14px;margin-bottom:12px;">
+        <label class="label" style="font-size:14px;margin-bottom:8px;">🧀 المكونات الأساسية للبيتزا</label>
+        <p style="font-size:12px;color:#6B7280;margin-bottom:10px;">الزبون يستطيع إلغاء أي مكوّن من هذه القائمة</p>
+        <div id="toppings-chips" style="min-height:36px;background:#F9FAFB;border-radius:8px;padding:8px;border:1px solid #E5E7EB;margin-bottom:8px;"></div>
+        <div style="display:flex;gap:8px;">
+          <input class="input" id="new-topping-input" placeholder="اسم المكوّن (مثال: موزاريلا)" style="flex:1;" onkeydown="if(event.key==='Enter'){addToppingChip();event.preventDefault();}">
+          <button class="btn btn-ghost btn-sm" onclick="addToppingChip()"><i class="fas fa-plus"></i>إضافة</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-ghost" onclick="closeEditModal()">إلغاء</button>
+    <button class="btn btn-primary" onclick="saveItem()"><i class="fas fa-save"></i>حفظ التغييرات</button>
+  </div>
+</div>
+</div>
+
+<!-- ===== EXTRA TOPPING MODAL ===== -->
+<div class="overlay" id="extra-overlay" onclick="closeExtraModal()">
+<div class="modal" style="max-width:380px;" onclick="event.stopPropagation()">
+  <div class="modal-header">
+    <h3 style="font-weight:800;font-size:15px;" id="extra-modal-title">إضافة مكوّن مدفوع</h3>
+    <button onclick="closeExtraModal()" style="background:none;border:none;cursor:pointer;font-size:18px;color:#9CA3AF;"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <label class="label">اسم الإضافة *</label>
+      <input class="input" id="extra-name" placeholder="مثال: جبنة إضافية">
+    </div>
+    <div class="form-group">
+      <label class="label">السعر (د.أ) *</label>
+      <input class="input" id="extra-price" type="number" step="0.25" min="0" placeholder="0.50">
+    </div>
+    <input type="hidden" id="extra-edit-id">
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-ghost" onclick="closeExtraModal()">إلغاء</button>
+    <button class="btn btn-primary" onclick="saveExtra()"><i class="fas fa-save"></i>حفظ</button>
+  </div>
+</div>
+</div>
+
+<!-- Notification -->
+<div id="notif"><div class="notif-msg" id="notif-msg"></div></div>
+
+<script>
+// =========================================
+// DEFAULT DATA
+// =========================================
+function getDefaultData(){
+  return {
+    branding:{
+      name:'برشتا بيتزا',nameEn:'Breshta Pizza',tagline:'أفضل بيتزا في عمّان!',
+      primaryColor:'#CC0000',secondaryColor:'#1a1a1a',accentColor:'#FFD700',logoDataUrl:null
+    },
+    pizza:[
+      {id:'pepperoni',name:'بيبروني',nameEn:'Pepperoni',desc:'بيتزا كلاسيكية بشرائح البيبروني الطازجة',price:3,emoji:'🍕',imageDataUrl:null,gradient:'linear-gradient(135deg,#7f1d1d,#DC2626)',toppings:['موزاريلا','صلصة الطماطم','بيبروني','أوريغانو']},
+      {id:'margherita',name:'مارجريتا',nameEn:'Margherita',desc:'الكلاسيك الإيطالي بالطماطم والموزاريلا الطازجة',price:3,emoji:'🍅',imageDataUrl:null,gradient:'linear-gradient(135deg,#14532d,#22C55E)',toppings:['موزاريلا','صلصة الطماطم','ريحان طازج','زيت زيتون']},
+      {id:'spicy-ranch',name:'سبايسي رانش',nameEn:'Spicy Ranch',desc:'بيتزا حارة بصلصة الرانش الحارة',price:3,emoji:'🌶️',imageDataUrl:null,gradient:'linear-gradient(135deg,#431407,#EA580C)',toppings:['موزاريلا','صلصة رانش حارة','فلفل حلو','جالابينو','دجاج']},
+      {id:'ranch',name:'رانش',nameEn:'Ranch',desc:'بيتزا كريمية بصلصة الرانش',price:3,emoji:'🥛',imageDataUrl:null,gradient:'linear-gradient(135deg,#0c4a6e,#0EA5E9)',toppings:['موزاريلا','صلصة رانش','دجاج','فلفل حلو']},
+      {id:'bbq-chicken',name:'دجاج باربيكيو',nameEn:'BBQ Chicken',desc:'دجاج مشوي بصلصة الباربيكيو الغنية',price:3,emoji:'🍗',imageDataUrl:null,gradient:'linear-gradient(135deg,#451a03,#D97706)',toppings:['موزاريلا','صلصة باربيكيو','دجاج مشوي','بصل','فلفل']},
+      {id:'bbq-ranch',name:'باربيكيو رانش',nameEn:'BBQ Ranch',desc:'مزيج رائع من الباربيكيو والرانش',price:3,emoji:'🥩',imageDataUrl:null,gradient:'linear-gradient(135deg,#7C2D12,#7C3AED)',toppings:['موزاريلا','صلصة باربيكيو رانش','دجاج','بصل مكرمل']},
+      {id:'veggie',name:'الخضار',nameEn:'Veggie Pizza',desc:'بيتزا الخضار الطازجة المشكلة',price:3,emoji:'🥦',imageDataUrl:null,gradient:'linear-gradient(135deg,#052e16,#16A34A)',toppings:['موزاريلا','صلصة الطماطم','فلفل ملون','بصل','زيتون','فطر','جزر']},
+      {id:'pizzasta',name:'بيتزاستا',nameEn:'Pizzasta',desc:'بيتزا فريدة مع باستا في الوسط',price:3,emoji:'🍝',imageDataUrl:null,gradient:'linear-gradient(135deg,#2e1065,#A855F7)',toppings:['موزاريلا','صلصة الطماطم','باستا ألفريدو','دجاج']},
+    ],
+    appetizers:[
+      {id:'gb',name:'خبز الثوم',nameEn:'Garlic Bread',desc:'خبز مقرمش بالثوم والزبدة',price:1.5,emoji:'🫓',imageDataUrl:null,gradient:'linear-gradient(135deg,#78350F,#D97706)'},
+      {id:'ms',name:'أصابع موزاريلا',nameEn:'Mozzarella Sticks',desc:'6 أصابع مقرمشة مع صلصة تغميس',price:2.5,emoji:'🧀',imageDataUrl:null,gradient:'linear-gradient(135deg,#713F12,#F59E0B)'},
+      {id:'cw',name:'أجنحة الدجاج',nameEn:'Chicken Wings',desc:'6 أجنحة مع صلصة اختيارك',price:3.5,emoji:'🍗',imageDataUrl:null,gradient:'linear-gradient(135deg,#451a03,#C2410C)'},
+      {id:'pw',name:'أوتار البطاطا',nameEn:'Potato Wedges',desc:'بطاطا مقرمشة بتوابل خاصة',price:2.0,emoji:'🍟',imageDataUrl:null,gradient:'linear-gradient(135deg,#713F12,#EAB308)'},
+      {id:'lf',name:'بطاطا محملة',nameEn:'Loaded Fries',desc:'بطاطا مع جبنة وصلصة كريمي',price:3.0,emoji:'🍟',imageDataUrl:null,gradient:'linear-gradient(135deg,#7C2D12,#F97316)'},
+      {id:'cs',name:'سلطة سيزر',nameEn:'Caesar Salad',desc:'خس روماني مع صلصة سيزر',price:2.5,emoji:'🥗',imageDataUrl:null,gradient:'linear-gradient(135deg,#14532d,#4ADE80)'},
+    ],
+    drinks:[
+      {id:'pepsi',name:'بيبسي',nameEn:'Pepsi',desc:'علبة 330 مل',price:0.75,emoji:'🥤',imageDataUrl:null,gradient:'linear-gradient(135deg,#1e1b4b,#4338CA)'},
+      {id:'7up',name:'سفن أب',nameEn:'7UP',desc:'علبة 330 مل',price:0.75,emoji:'🥤',imageDataUrl:null,gradient:'linear-gradient(135deg,#14532d,#22C55E)'},
+      {id:'mir',name:'ميرندا',nameEn:'Miranda',desc:'علبة 330 مل',price:0.75,emoji:'🥤',imageDataUrl:null,gradient:'linear-gradient(135deg,#431407,#F97316)'},
+      {id:'wat',name:'مياه معدنية',nameEn:'Mineral Water',desc:'زجاجة 500 مل',price:0.5,emoji:'💧',imageDataUrl:null,gradient:'linear-gradient(135deg,#0c4a6e,#38BDF8)'},
+      {id:'fj',name:'عصير طازج',nameEn:'Fresh Juice',desc:'برتقال، تفاح، أو جزر',price:2.0,emoji:'🍊',imageDataUrl:null,gradient:'linear-gradient(135deg,#7c2d12,#FB923C)'},
+      {id:'mk',name:'ميلك شيك',nameEn:'Milkshake',desc:'شوكولاتة، فراولة، أو فانيلا',price:3.0,emoji:'🥤',imageDataUrl:null,gradient:'linear-gradient(135deg,#3b0764,#C084FC)'},
+    ],
+    desserts:[
+      {id:'cc',name:'كيك الشوكولاتة',nameEn:'Chocolate Cake',desc:'كيك لازق بصوص الكراميل',price:2.5,emoji:'🎂',imageDataUrl:null,gradient:'linear-gradient(135deg,#1c0a00,#78350F)'},
+      {id:'ck',name:'كوكيز',nameEn:'Cookies',desc:'4 قطع كوكيز بالشوكولاتة',price:1.5,emoji:'🍪',imageDataUrl:null,gradient:'linear-gradient(135deg,#451a03,#D97706)'},
+      {id:'np',name:'بيتزا نوتيلا',nameEn:'Nutella Pizza',desc:'عجينة بيتزا مع نوتيلا وفراولة',price:4.0,emoji:'🍫',imageDataUrl:null,gradient:'linear-gradient(135deg,#27130e,#B45309)'},
+      {id:'ic',name:'آيس كريم',nameEn:'Ice Cream',desc:'2 كرة آيس كريم باختيارك',price:1.5,emoji:'🍦',imageDataUrl:null,gradient:'linear-gradient(135deg,#4a044e,#E879F9)'},
+      {id:'chk',name:'تشيز كيك',nameEn:'Cheesecake',desc:'تشيز كيك كلاسيكي بالتوت',price:3.0,emoji:'🍰',imageDataUrl:null,gradient:'linear-gradient(135deg,#831843,#F472B6)'},
+    ],
+    offers:[
+      {id:'fam',name:'عرض العائلة',nameEn:'Family Deal',desc:'بيتزا كبيرة + 2 مقبلات + 4 مشروبات',price:18,emoji:'👨‍👩‍👧‍👦',badge:'الأكثر طلباً',imageDataUrl:null,gradient:'linear-gradient(135deg,#7f1d1d,#B91C1C)'},
+      {id:'std',name:'عرض الطالب',nameEn:'Student Deal',desc:'بيتزا صغيرة شخصية + مشروب',price:5.5,emoji:'🎓',badge:'قيمة',imageDataUrl:null,gradient:'linear-gradient(135deg,#1e1b4b,#4338CA)'},
+      {id:'cpd',name:'عرض الزوجين',nameEn:'Couple Deal',desc:'بيتزاتان وسط + مقبل + مشروبان',price:13,emoji:'💑',badge:'رومانسي',imageDataUrl:null,gradient:'linear-gradient(135deg,#831843,#EC4899)'},
+      {id:'par',name:'عرض الحفلة',nameEn:'Party Deal',desc:'3 بيتزا كبيرة + 6 مقبلات + 6 مشروبات',price:35,emoji:'🎉',badge:'للمجموعات',imageDataUrl:null,gradient:'linear-gradient(135deg,#064e3b,#059669)'},
+    ],
+    extraToppings:[
+      {id:'et1',name:'جبنة موزاريلا إضافية',price:0.75},
+      {id:'et2',name:'هالابينو',price:0.50},
+      {id:'et3',name:'فطر',price:0.50},
+      {id:'et4',name:'زيتون',price:0.50},
+      {id:'et5',name:'بيبروني إضافي',price:1.00},
+      {id:'et6',name:'دجاج إضافي',price:1.25},
+      {id:'et7',name:'بصل كرمل',price:0.25},
+      {id:'et8',name:'فلفل حلو',price:0.25},
+      {id:'et9',name:'جبنة شيدر',price:0.75},
+    ]
+  };
+}
+
+// =========================================
+// DATA LAYER
+// =========================================
+let appData;
+function loadData(){
+  const s = localStorage.getItem('breshta_data');
+  try{ return s ? JSON.parse(s) : getDefaultData(); }catch(e){ return getDefaultData(); }
+}
+function saveData(){
+  localStorage.setItem('breshta_data', JSON.stringify(appData));
+  notify('✅ تم الحفظ بنجاح');
+}
+
+// =========================================
+// NAVIGATION
+// =========================================
+const secTitles = {dashboard:'لوحة التحكم',branding:'الهوية البصرية',pizza:'إدارة البيتزا',appetizers:'المقبلات',drinks:'المشروبات',desserts:'الحلويات',offers:'العروض',extras:'الإضافات المدفوعة'};
+function showSec(sec){
+  document.querySelectorAll('.admin-sec').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
+  document.getElementById('sec-'+sec).classList.add('active');
+  document.getElementById('nav-'+sec).classList.add('active');
+  document.getElementById('page-title').textContent = secTitles[sec]||sec;
+  if(sec==='dashboard') renderDashboard();
+  else if(sec==='branding') loadBrandingForm();
+  else if(sec==='extras') renderExtras();
+  else renderItemsGrid(sec);
+  closeMobileSidebar();
+}
+
+// =========================================
+// DASHBOARD
+// =========================================
+function renderDashboard(){
+  const data = appData;
+  const cats = [{label:'البيتزا',key:'pizza',color:'#CC0000',icon:'fa-pizza-slice'},{label:'المقبلات',key:'appetizers',color:'#EA580C',icon:'fa-drumstick-bite'},{label:'المشروبات',key:'drinks',color:'#0EA5E9',icon:'fa-glass-water'},{label:'الحلويات',key:'desserts',color:'#D946EF',icon:'fa-ice-cream'},{label:'العروض',key:'offers',color:'#22C55E',icon:'fa-percent'}];
+  document.getElementById('stats-grid').innerHTML = cats.map(c=>`
+    <div class="stat" style="border-right-color:${c.color};cursor:pointer;" onclick="showSec('${c.key}')">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+        <span style="font-size:11px;font-weight:700;color:#6B7280;">${c.label}</span>
+        <i class="fas ${c.icon}" style="color:${c.color};font-size:16px;"></i>
+      </div>
+      <div style="font-size:28px;font-weight:900;color:#111827;">${(appData[c.key]||[]).length}</div>
+      <div style="font-size:11px;color:#9CA3AF;">عنصر</div>
+    </div>
+  `).join('');
+}
+
+// =========================================
+// ITEMS GRID
+// =========================================
+function renderItemsGrid(cat){
+  const items = appData[cat]||[];
+  const el = document.getElementById('grid-'+cat);
+  if(!el) return;
+  if(items.length===0){
+    el.innerHTML=`<div class="empty-state" style="grid-column:1/-1;"><div class="icon">📭</div><div>لا يوجد عناصر بعد</div></div>`;return;
+  }
+  el.innerHTML = items.map((item,idx)=>`
+    <div class="item-card">
+      <div class="item-img" style="background:${item.gradient||'#CC0000'};">
+        ${item.imageDataUrl
+          ? `<img src="${item.imageDataUrl}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover;">`
+          : `<span style="font-size:58px;filter:drop-shadow(0 3px 8px rgba(0,0,0,.3));">${item.emoji||'🍕'}</span>`}
+      </div>
+      <div style="padding:12px;">
+        <div style="font-weight:800;font-size:14px;margin-bottom:2px;">${item.name}</div>
+        <div style="font-size:11px;color:#9CA3AF;margin-bottom:6px;">${item.nameEn||''}</div>
+        ${item.desc?`<div style="font-size:11px;color:#6B7280;margin-bottom:8px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${item.desc}</div>`:''}
+        ${cat==='pizza'&&item.toppings&&item.toppings.length?`<div style="font-size:10px;color:#9CA3AF;margin-bottom:6px;"><i class="fas fa-list" style="margin-left:3px;"></i>${item.toppings.slice(0,3).join('، ')}${item.toppings.length>3?'...':''}</div>`:''}
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <span style="font-weight:900;color:#CC0000;font-size:15px;">${Number(item.price).toFixed(2)} د.أ</span>
+          ${item.badge?`<span style="font-size:10px;background:#FEF3C7;color:#92400E;border-radius:50px;padding:2px 8px;font-weight:700;">${item.badge}</span>`:''}
+        </div>
+        <div style="display:flex;gap:6px;">
+          <button class="btn btn-ghost btn-sm" style="flex:1;justify-content:center;" onclick="openEditModal('${cat}',${idx})"><i class="fas fa-edit"></i>تعديل</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteItem('${cat}',${idx})"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// =========================================
+// EDIT MODAL
+// =========================================
+let editState = {cat:null, idx:null, isNew:false, imgDataUrl:null, toppings:[]};
+
+function openAddModal(cat){
+  editState = {cat, idx:null, isNew:true, imgDataUrl:null, toppings:[]};
+  document.getElementById('edit-modal-title').textContent = 'إضافة عنصر جديد';
+  resetEditForm();
+  document.getElementById('toppings-section').style.display = cat==='pizza'?'block':'none';
+  document.getElementById('badge-group').style.display = cat==='offers'?'block':'none';
+  document.getElementById('edit-overlay').classList.add('show');
+}
+
+function openEditModal(cat, idx){
+  const item = appData[cat][idx];
+  editState = {cat, idx, isNew:false, imgDataUrl:item.imageDataUrl||null, toppings:[...(item.toppings||[])]};
+  document.getElementById('edit-modal-title').textContent = 'تعديل: '+item.name;
+  document.getElementById('f-name').value = item.name||'';
+  document.getElementById('f-name-en').value = item.nameEn||'';
+  document.getElementById('f-desc').value = item.desc||'';
+  document.getElementById('f-price').value = item.price||'';
+  document.getElementById('f-emoji').value = item.emoji||'';
+  document.getElementById('f-badge').value = item.badge||'';
+  // parse gradient colors
+  const gMatch = (item.gradient||'').match(/#[0-9a-fA-F]{3,6}/g);
+  if(gMatch){
+    document.getElementById('f-color1').value = gMatch[0]||'#7f1d1d';
+    document.getElementById('f-color1-text').value = gMatch[0]||'#7f1d1d';
+    document.getElementById('f-color2').value = gMatch[1]||'#CC0000';
+    document.getElementById('f-color2-text').value = gMatch[1]||'#CC0000';
+  }
+  document.getElementById('toppings-section').style.display = cat==='pizza'?'block':'none';
+  document.getElementById('badge-group').style.display = cat==='offers'?'block':'none';
+  if(cat==='pizza') renderToppingChips();
+  setItemImgPreview(item.imageDataUrl);
+  document.getElementById('edit-overlay').classList.add('show');
+}
+
+function closeEditModal(){
+  document.getElementById('edit-overlay').classList.remove('show');
+}
+
+function resetEditForm(){
+  ['f-name','f-name-en','f-desc','f-price','f-emoji','f-badge'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-color1').value='#7f1d1d'; document.getElementById('f-color1-text').value='#7f1d1d';
+  document.getElementById('f-color2').value='#CC0000'; document.getElementById('f-color2-text').value='#CC0000';
+  editState.toppings=[];
+  renderToppingChips();
+  setItemImgPreview(null);
+}
+
+function saveItem(){
+  const name = document.getElementById('f-name').value.trim();
+  const price = parseFloat(document.getElementById('f-price').value);
+  if(!name){ notify('⚠️ الاسم مطلوب'); return; }
+  if(isNaN(price)||price<0){ notify('⚠️ السعر مطلوب'); return; }
+  const c1 = document.getElementById('f-color1').value;
+  const c2 = document.getElementById('f-color2').value;
+  const item = {
+    id: editState.isNew ? 'item_'+Date.now() : appData[editState.cat][editState.idx].id,
+    name,
+    nameEn: document.getElementById('f-name-en').value.trim(),
+    desc: document.getElementById('f-desc').value.trim(),
+    price,
+    emoji: document.getElementById('f-emoji').value.trim()||'🍕',
+    badge: document.getElementById('f-badge').value.trim(),
+    imageDataUrl: editState.imgDataUrl,
+    gradient: `linear-gradient(135deg,${c1},${c2})`,
+  };
+  if(editState.cat==='pizza') item.toppings=[...editState.toppings];
+  if(editState.isNew){ appData[editState.cat].push(item); }
+  else{ appData[editState.cat][editState.idx] = item; }
+  saveData();
+  closeEditModal();
+  renderItemsGrid(editState.cat);
+}
+
+function deleteItem(cat, idx){
+  if(!confirm('هل أنت متأكد من الحذف؟')) return;
+  appData[cat].splice(idx,1);
+  saveData();
+  renderItemsGrid(cat);
+}
+
+// =========================================
+// IMAGE HANDLING
+// =========================================
+function compressImage(file, maxDim=600, quality=0.82){
+  return new Promise(resolve=>{
+    const reader = new FileReader();
+    reader.onload = e=>{
+      const img = new Image();
+      img.onload = ()=>{
+        let w=img.width, h=img.height;
+        if(w>h&&w>maxDim){h=Math.round((h/w)*maxDim);w=maxDim;}
+        else if(h>maxDim){w=Math.round((w/h)*maxDim);h=maxDim;}
+        const canvas=document.createElement('canvas'); canvas.width=w; canvas.height=h;
+        canvas.getContext('2d').drawImage(img,0,0,w,h);
+        resolve(canvas.toDataURL('image/jpeg',quality));
+      };
+      img.src=e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function handleItemImgUpload(e){
+  const file=e.target.files[0]; if(!file) return;
+  const dataUrl = await compressImage(file);
+  editState.imgDataUrl = dataUrl;
+  setItemImgPreview(dataUrl);
+}
+function handleItemImgDrop(e){
+  e.preventDefault(); document.getElementById('item-img-zone').classList.remove('drag');
+  const file=e.dataTransfer.files[0]; if(!file||!file.type.startsWith('image/')) return;
+  handleItemImgUpload({target:{files:[file]}});
+}
+function setItemImgPreview(dataUrl){
+  const wrap=document.getElementById('item-img-preview');
+  const zone=document.getElementById('item-img-zone');
+  if(dataUrl){
+    wrap.innerHTML=`<img src="${dataUrl}" class="upload-preview">`;
+    zone.classList.add('has-img');
+  } else {
+    wrap.innerHTML=`<i class="fas fa-cloud-upload-alt" style="font-size:28px;color:#9CA3AF;display:block;margin-bottom:6px;"></i><div style="font-size:12px;color:#6B7280;">اضغط أو اسحب الصورة هنا</div>`;
+    zone.classList.remove('has-img');
+  }
+}
+function clearItemImg(){
+  editState.imgDataUrl=null; setItemImgPreview(null);
+  document.getElementById('item-img-file').value='';
+}
+
+// Logo upload
+async function handleLogoUpload(e){
+  const file=e.target.files[0]; if(!file) return;
+  const dataUrl = await compressImage(file,200,0.9);
+  appData.branding.logoDataUrl=dataUrl;
+  renderLogoPreview(dataUrl);
+}
+function handleLogoDrop(e){
+  e.preventDefault(); document.getElementById('logo-zone').classList.remove('drag');
+  const file=e.dataTransfer.files[0]; if(!file||!file.type.startsWith('image/')) return;
+  handleLogoUpload({target:{files:[file]}});
+}
+function renderLogoPreview(dataUrl){
+  const wrap=document.getElementById('logo-preview-wrap');
+  const zone=document.getElementById('logo-zone');
+  if(dataUrl){
+    wrap.innerHTML=`<img src="${dataUrl}" style="max-height:80px;max-width:180px;border-radius:8px;object-fit:contain;">`;
+    zone.classList.add('has-img');
+    document.getElementById('remove-logo-btn').style.display='inline-flex';
+  } else {
+    wrap.innerHTML=`<i class="fas fa-image" style="font-size:32px;color:#9CA3AF;margin-bottom:8px;display:block;"></i><div style="font-size:13px;color:#6B7280;">اضغط أو اسحب لرفع الشعار</div><div style="font-size:11px;color:#9CA3AF;margin-top:4px;">PNG, JPG, SVG</div>`;
+    zone.classList.remove('has-img');
+    document.getElementById('remove-logo-btn').style.display='none';
+  }
+}
+function removeLogo(){
+  appData.branding.logoDataUrl=null;
+  renderLogoPreview(null);
+}
+
+// =========================================
+// TOPPINGS (per pizza)
+// =========================================
+function renderToppingChips(){
+  const wrap=document.getElementById('toppings-chips');
+  if(!wrap) return;
+  if(editState.toppings.length===0){
+    wrap.innerHTML='<span style="font-size:12px;color:#9CA3AF;">لا يوجد مكونات. أضف من الحقل أدناه.</span>';
+    return;
+  }
+  wrap.innerHTML=editState.toppings.map((t,i)=>`
+    <span class="chip">${t}<button onclick="removeTopping(${i})" title="حذف">×</button></span>
+  `).join('');
+}
+function addToppingChip(){
+  const input=document.getElementById('new-topping-input');
+  const val=input.value.trim(); if(!val) return;
+  if(!editState.toppings.includes(val)) editState.toppings.push(val);
+  input.value='';
+  renderToppingChips();
+}
+function removeTopping(i){
+  editState.toppings.splice(i,1);
+  renderToppingChips();
+}
+
+// =========================================
+// COLOR SYNC
+// =========================================
+function syncColor(field){
+  const v=document.getElementById('b-'+field).value;
+  document.getElementById('b-'+field+'-text').value=v;
+}
+function syncColorText(field){
+  const v=document.getElementById('b-'+field+'-text').value;
+  if(/^#[0-9a-fA-F]{6}$/.test(v)) document.getElementById('b-'+field).value=v;
+}
+function syncFColor(n){ const v=document.getElementById('f-color'+n).value; document.getElementById('f-color'+n+'-text').value=v; }
+function syncFColorText(n){ const v=document.getElementById('f-color'+n+'-text').value; if(/^#[0-9a-fA-F]{6}$/.test(v)) document.getElementById('f-color'+n).value=v; }
+
+// =========================================
+// BRANDING
+// =========================================
+function loadBrandingForm(){
+  const b=appData.branding;
+  document.getElementById('b-name').value=b.name||'';
+  document.getElementById('b-name-en').value=b.nameEn||'';
+  document.getElementById('b-tagline').value=b.tagline||'';
+  document.getElementById('b-primary').value=b.primaryColor||'#CC0000';
+  document.getElementById('b-primary-text').value=b.primaryColor||'#CC0000';
+  document.getElementById('b-secondary').value=b.secondaryColor||'#1a1a1a';
+  document.getElementById('b-secondary-text').value=b.secondaryColor||'#1a1a1a';
+  document.getElementById('b-accent').value=b.accentColor||'#FFD700';
+  document.getElementById('b-accent-text').value=b.accentColor||'#FFD700';
+  renderLogoPreview(b.logoDataUrl);
+  previewBranding();
+}
+
+function previewBranding(){
+  const name=document.getElementById('b-name').value||'برشتا بيتزا';
+  const nameEn=document.getElementById('b-name-en').value||'Breshta Pizza';
+  const tagline=document.getElementById('b-tagline').value||'أفضل بيتزا في عمّان!';
+  const primary=document.getElementById('b-primary').value||'#CC0000';
+  const secondary=document.getElementById('b-secondary').value||'#1a1a1a';
+  const accent=document.getElementById('b-accent').value||'#FFD700';
+  const logoUrl=appData.branding.logoDataUrl;
+  document.getElementById('bp-bar').style.background=secondary;
+  document.getElementById('bp-name').textContent=name;
+  document.getElementById('bp-name-en').style.color=primary;
+  document.getElementById('bp-name-en').textContent=nameEn;
+  document.getElementById('bp-tagline').style.color=accent;
+  document.getElementById('bp-tagline').textContent=tagline;
+  document.getElementById('bp-btn').style.background=primary;
+  document.getElementById('bp-cta').style.background=primary;
+  document.getElementById('bp-hero').style.background=`linear-gradient(135deg,#0d0d0d,${secondary},${primary})`;
+  const sbLogoDiv=document.getElementById('sb-logo-img');
+  if(logoUrl){
+    sbLogoDiv.innerHTML=`<img src="${logoUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+    document.getElementById('bp-logo').innerHTML=`<img src="${logoUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+  } else {
+    sbLogoDiv.innerHTML=`<i class="fas fa-pizza-slice" style="color:white;font-size:16px;"></i>`;
+    document.getElementById('bp-logo').innerHTML=`<i class="fas fa-pizza-slice" style="color:white;font-size:14px;"></i>`;
+    document.getElementById('bp-logo').style.background=primary;
+    sbLogoDiv.style.background=`linear-gradient(135deg,${primary},${primary}88)`;
+  }
+  document.getElementById('sb-name').textContent=name;
+}
+
+function saveBranding(){
+  appData.branding={
+    name:document.getElementById('b-name').value,
+    nameEn:document.getElementById('b-name-en').value,
+    tagline:document.getElementById('b-tagline').value,
+    primaryColor:document.getElementById('b-primary').value,
+    secondaryColor:document.getElementById('b-secondary').value,
+    accentColor:document.getElementById('b-accent').value,
+    logoDataUrl:appData.branding.logoDataUrl,
+  };
+  saveData();
+  previewBranding();
+}
+
+// =========================================
+// EXTRA TOPPINGS
+// =========================================
+let extraEditId=null;
+function renderExtras(){
+  const list=document.getElementById('extras-list');
+  if(!appData.extraToppings.length){
+    list.innerHTML='<div class="empty-state"><div class="icon">➕</div><div>لا يوجد إضافات بعد</div></div>'; return;
+  }
+  list.innerHTML='<div class="card" style="padding:0;overflow:hidden;">'+
+    appData.extraToppings.map((t,i)=>`
+      <div class="topping-row" style="border-radius:0;border:none;border-bottom:1px solid #E5E7EB;margin-bottom:0;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;background:#FEF2F2;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;">➕</div>
+          <div>
+            <div style="font-weight:700;font-size:14px;">${t.name}</div>
+            <div style="font-size:12px;color:#CC0000;font-weight:700;">+${Number(t.price).toFixed(2)} د.أ</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;">
+          <button class="btn btn-ghost btn-sm" onclick="openEditExtraModal('${t.id}')"><i class="fas fa-edit"></i>تعديل</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteExtra('${t.id}')"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>
+    `).join('')+
+  '</div>';
+}
+function openAddExtraModal(){
+  extraEditId=null;
+  document.getElementById('extra-modal-title').textContent='إضافة مكوّن مدفوع';
+  document.getElementById('extra-name').value='';
+  document.getElementById('extra-price').value='';
+  document.getElementById('extra-overlay').classList.add('show');
+}
+function openEditExtraModal(id){
+  const t=appData.extraToppings.find(x=>x.id===id); if(!t) return;
+  extraEditId=id;
+  document.getElementById('extra-modal-title').textContent='تعديل: '+t.name;
+  document.getElementById('extra-name').value=t.name;
+  document.getElementById('extra-price').value=t.price;
+  document.getElementById('extra-overlay').classList.add('show');
+}
+function closeExtraModal(){ document.getElementById('extra-overlay').classList.remove('show'); }
+function saveExtra(){
+  const name=document.getElementById('extra-name').value.trim();
+  const price=parseFloat(document.getElementById('extra-price').value);
+  if(!name){ notify('⚠️ الاسم مطلوب'); return; }
+  if(isNaN(price)||price<0){ notify('⚠️ السعر مطلوب'); return; }
+  if(extraEditId){
+    const t=appData.extraToppings.find(x=>x.id===extraEditId);
+    if(t){t.name=name;t.price=price;}
+  } else {
+    appData.extraToppings.push({id:'et_'+Date.now(),name,price});
+  }
+  saveData(); closeExtraModal(); renderExtras();
+}
+function deleteExtra(id){
+  if(!confirm('حذف هذه الإضافة؟')) return;
+  appData.extraToppings=appData.extraToppings.filter(x=>x.id!==id);
+  saveData(); renderExtras();
+}
+
+// =========================================
+// EXPORT / IMPORT
+// =========================================
+function exportData(){
+  const blob=new Blob([JSON.stringify(appData,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='breshta-data-'+new Date().toISOString().slice(0,10)+'.json'; a.click();
+}
+function importData(e){
+  const file=e.target.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=ev=>{ try{ appData=JSON.parse(ev.target.result); saveData(); renderDashboard(); notify('✅ تم الاستيراد بنجاح'); }catch(err){ notify('❌ ملف غير صالح'); } };
+  reader.readAsText(file);
+}
+
+// =========================================
+// SIDEBAR MOBILE
+// =========================================
+function toggleSidebar(){
+  const sb=document.getElementById('sidebar');
+  const bd=document.getElementById('sb-backdrop');
+  sb.classList.toggle('open');
+  bd.classList.toggle('show');
+}
+function closeMobileSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sb-backdrop').classList.remove('show');
+}
+
+// =========================================
+// NOTIFICATION
+// =========================================
+let notifTimer;
+function notify(msg){
+  const el=document.getElementById('notif');
+  document.getElementById('notif-msg').textContent=msg;
+  el.style.display='block';
+  clearTimeout(notifTimer);
+  notifTimer=setTimeout(()=>el.style.display='none',2500);
+}
+
+// =========================================
+// INIT
+// =========================================
+function init(){
+  appData=loadData();
+  renderDashboard();
+  // Mobile: show hamburger
+  if(window.innerWidth<=768) document.getElementById('menu-toggle').style.display='block';
+  // Responsive branding layout
+  if(window.innerWidth<900){
+    const bl=document.getElementById('branding-layout');
+    if(bl) bl.style.gridTemplateColumns='1fr';
+  }
+}
+document.addEventListener('DOMContentLoaded',init);
+window.addEventListener('resize',()=>{
+  document.getElementById('menu-toggle').style.display=window.innerWidth<=768?'block':'none';
+});
+</script>
+</body>
+</html>

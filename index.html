@@ -9,1402 +9,742 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{font-family:'Cairo',sans-serif;box-sizing:border-box;}
-:root{--red:#CC0000;--red-dark:#A30000;--red-light:#FF4444;}
+:root{--red:#CC0000;--red-dark:#A30000;--secondary:#1a1a1a;--accent:#FFD700;}
 body{background:#F2F2F2;color:#1a1a1a;}
 ::-webkit-scrollbar{width:5px;height:5px;}
 ::-webkit-scrollbar-thumb{background:var(--red);border-radius:5px;}
-::-webkit-scrollbar-track{background:#eee;}
-
-/* Header */
-.hdr{background:linear-gradient(180deg,#111 0%,#1a1a1a 100%);position:fixed;top:0;left:0;right:0;z-index:200;height:68px;box-shadow:0 2px 20px rgba(0,0,0,.5);}
-
-/* Hero */
-.hero{background:linear-gradient(135deg,#0d0d0d 0%,#5c0000 45%,#CC0000 100%);min-height:100vh;display:flex;align-items:center;}
-.hero-ring{border-radius:50%;border:2px solid rgba(255,255,255,.08);position:absolute;}
+.hdr{background:var(--secondary);position:fixed;top:0;left:0;right:0;z-index:200;height:68px;box-shadow:0 2px 20px rgba(0,0,0,.5);transition:background .3s;}
+.hero{background:linear-gradient(135deg,#0d0d0d 0%,var(--secondary) 40%,var(--red) 100%);min-height:100vh;display:flex;align-items:center;transition:background .3s;}
+.hero-ring{border-radius:50%;border:2px solid rgba(255,255,255,.07);position:absolute;}
 @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
 .spin1{animation:spin 25s linear infinite;}
 .spin2{animation:spin 18s linear infinite reverse;}
-
-/* Tabs */
-.tab-bar{background:#1a1a1a;position:sticky;top:68px;z-index:150;box-shadow:0 4px 15px rgba(0,0,0,.3);}
-.tab-item{color:#9CA3AF;cursor:pointer;transition:all .25s;padding:16px 12px;font-weight:700;font-size:13px;white-space:nowrap;border-bottom:3px solid transparent;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.tab-bar{background:var(--secondary);position:sticky;top:68px;z-index:150;box-shadow:0 4px 15px rgba(0,0,0,.3);transition:background .3s;}
+.tab-item{color:#9CA3AF;cursor:pointer;transition:all .25s;padding:14px 12px;font-weight:700;font-size:13px;white-space:nowrap;border-bottom:3px solid transparent;display:flex;flex-direction:column;align-items:center;gap:3px;}
 .tab-item:hover{color:#e5e5e5;}
-.tab-item.active{color:#CC0000;border-bottom-color:#CC0000;}
-
-/* Cards */
+.tab-item.active{color:var(--red);border-bottom-color:var(--red);}
 .menu-card{background:white;border-radius:16px;overflow:hidden;transition:all .3s;cursor:pointer;}
-.menu-card:hover{transform:translateY(-5px);box-shadow:0 16px 40px rgba(204,0,0,.14);}
+.menu-card:hover{transform:translateY(-5px);box-shadow:0 16px 40px rgba(0,0,0,.12);}
 .card-img{height:160px;display:flex;align-items:center;justify-content:center;font-size:64px;position:relative;overflow:hidden;}
-
-/* Buttons */
-.btn-red{background:linear-gradient(135deg,#CC0000,#FF4444);color:white;border:none;cursor:pointer;transition:all .3s;font-family:'Cairo',sans-serif;font-weight:700;}
-.btn-red:hover{background:linear-gradient(135deg,#A30000,#CC0000);transform:translateY(-2px);box-shadow:0 8px 24px rgba(204,0,0,.4);}
-.btn-red:active{transform:translateY(0);}
-.btn-outline{border:2px solid #CC0000;color:#CC0000;background:transparent;cursor:pointer;transition:all .2s;font-family:'Cairo',sans-serif;font-weight:700;}
-.btn-outline:hover{background:#CC0000;color:white;}
-
-/* Pizza modal selections */
+.card-img img{width:100%;height:100%;object-fit:cover;}
+.btn-red{background:linear-gradient(135deg,var(--red),#FF4444);color:white;border:none;cursor:pointer;transition:all .3s;font-family:'Cairo',sans-serif;font-weight:700;}
+.btn-red:hover{background:linear-gradient(135deg,var(--red-dark),var(--red));transform:translateY(-2px);box-shadow:0 8px 24px rgba(204,0,0,.4);}
+.btn-outline{border:2px solid rgba(255,255,255,.3);color:white;background:transparent;cursor:pointer;transition:all .2s;font-family:'Cairo',sans-serif;font-weight:700;}
+.btn-outline:hover{background:rgba(255,255,255,.1);}
 .ptype-card{border:2px solid #E5E7EB;border-radius:12px;cursor:pointer;transition:all .2s;text-align:center;padding:10px 6px;}
 .ptype-card:hover{border-color:#FFAAAA;}
-.ptype-card.sel{border-color:#CC0000;background:#FFF0F0;box-shadow:0 0 0 3px rgba(204,0,0,.15);}
+.ptype-card.sel{border-color:var(--red);background:#FFF0F0;box-shadow:0 0 0 3px rgba(204,0,0,.12);}
 .size-btn{border:2px solid #E5E7EB;border-radius:10px;cursor:pointer;transition:all .2s;padding:10px;text-align:center;}
-.size-btn:hover{border-color:#CC0000;}
-.size-btn.sel{background:#CC0000;color:white;border-color:#CC0000;}
+.size-btn:hover{border-color:var(--red);}
+.size-btn.sel{background:var(--red);color:white;border-color:var(--red);}
 .crust-btn{border:2px solid #E5E7EB;border-radius:8px;cursor:pointer;transition:all .2s;padding:8px 10px;text-align:center;font-size:13px;}
-.crust-btn:hover{border-color:#CC0000;}
-.crust-btn.sel{background:#CC0000;color:white;border-color:#CC0000;}
-
-/* Overlay */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);z-index:300;display:none;}
-.overlay.show{display:flex;align-items:center;justify-content:center;}
-
-/* Modal */
-.modal-box{background:white;border-radius:24px;max-height:90vh;overflow-y:auto;position:relative;width:100%;max-width:600px;margin:16px;}
+.crust-btn:hover{border-color:var(--red);}
+.crust-btn.sel{background:var(--red);color:white;border-color:var(--red);}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);z-index:300;display:none;align-items:flex-start;justify-content:center;padding-top:20px;}
+.overlay.show{display:flex;}
+.modal-box{background:white;border-radius:24px;max-height:90vh;overflow-y:auto;position:relative;width:100%;max-width:600px;margin:0 16px;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
 .modal-box{animation:fadeUp .35s ease forwards;}
-
-/* Cart */
 .cart-panel{position:fixed;top:0;right:0;height:100%;width:100%;max-width:420px;background:white;z-index:400;transform:translateX(100%);transition:transform .4s cubic-bezier(.4,0,.2,1);box-shadow:-8px 0 40px rgba(0,0,0,.2);}
 .cart-panel.open{transform:translateX(0);}
 .cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:399;display:none;}
 .cart-overlay.show{display:block;}
-
-/* Checkout */
 .checkout-step{display:none;}
 .checkout-step.active{display:block;}
+.sel-card{border:2px solid #E5E7EB;border-radius:12px;cursor:pointer;transition:all .2s;padding:14px;}
+.sel-card:hover{border-color:#FFAAAA;}
+.sel-card.chosen{border-color:var(--red);background:#FFF0F0;}
 .step-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;transition:all .3s;}
 .step-dot.done{background:#22C55E;color:white;}
-.step-dot.current{background:#CC0000;color:white;}
+.step-dot.current{background:var(--red);color:white;}
 .step-dot.todo{background:#E5E7EB;color:#9CA3AF;}
 .step-line{height:2px;flex:1;margin:0 6px;}
 .step-line.done{background:#22C55E;}
 .step-line.todo{background:#E5E7EB;}
-
-/* Selection cards for checkout */
-.sel-card{border:2px solid #E5E7EB;border-radius:12px;cursor:pointer;transition:all .2s;padding:14px;}
-.sel-card:hover{border-color:#FFAAAA;}
-.sel-card.chosen{border-color:#CC0000;background:#FFF0F0;}
-
-/* Offer badge */
-.o-badge{position:absolute;top:10px;left:10px;border-radius:6px;font-size:11px;font-weight:800;padding:3px 10px;color:white;}
-
-/* Metro card */
-.metro-card-bg{background:linear-gradient(135deg,#0d0d0d,#6B0000);}
-
-/* Toast */
+.topping-check-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;cursor:pointer;transition:all .15s;}
+.topping-check-item:hover{background:#FFF5F5;}
+.topping-check-item input[type=checkbox]{accent-color:var(--red);width:16px;height:16px;cursor:pointer;flex-shrink:0;}
+.extra-topping-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;cursor:pointer;transition:all .15s;border:1px solid #E5E7EB;margin-bottom:6px;}
+.extra-topping-item:hover{border-color:var(--red);background:#FFF5F5;}
+.extra-topping-item.selected{border-color:var(--red);background:#FFF0F0;}
+.extra-topping-item input[type=checkbox]{accent-color:var(--red);width:16px;height:16px;cursor:pointer;flex-shrink:0;}
+input,select,textarea{border:2px solid #E5E7EB;border-radius:10px;padding:10px 14px;width:100%;font-family:'Cairo',sans-serif;font-size:14px;transition:border-color .2s;}
+input:focus,select:focus,textarea:focus{border-color:var(--red);outline:none;box-shadow:0 0 0 3px rgba(204,0,0,.1);}
+.qty-btn{width:34px;height:34px;border-radius:50%;border:2px solid #E5E7EB;background:white;cursor:pointer;font-size:18px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.qty-btn:hover{background:var(--red);color:white;border-color:var(--red);}
+.sec{display:none;}
+.sec.active{display:block;}
+.metro-bg{background:linear-gradient(135deg,#0d0d0d,#6B0000);}
+.mc-check{display:none;}
+.mc-label{transition:all .2s;cursor:pointer;border:2px solid #E5E7EB;border-radius:8px;padding:8px 10px;font-size:13px;text-align:center;display:block;}
+.mc-check:checked + .mc-label{border-color:var(--red);background:#FFF0F0;color:var(--red);}
 @keyframes toastIn{from{opacity:0;transform:translateX(120%)}to{opacity:1;transform:translateX(0)}}
 @keyframes toastOut{to{opacity:0;transform:translateX(120%)}}
 .toast-msg{animation:toastIn .3s ease forwards;}
 .toast-msg.out{animation:toastOut .3s ease forwards;}
-
-/* Inputs */
-input,select,textarea{border:2px solid #E5E7EB;border-radius:10px;padding:10px 14px;width:100%;font-family:'Cairo',sans-serif;font-size:14px;transition:border-color .2s;}
-input:focus,select:focus,textarea:focus{border-color:#CC0000;outline:none;box-shadow:0 0 0 3px rgba(204,0,0,.1);}
-
-/* Success */
+.gradient-txt{background:linear-gradient(135deg,#FF6B6B,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
 @keyframes popIn{from{transform:scale(0)}to{transform:scale(1)}}
 .pop-in{animation:popIn .5s cubic-bezier(.175,.885,.32,1.275) forwards;}
-
-.gradient-txt{background:linear-gradient(135deg,#FF6B6B,#FFD700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-
-/* Qty */
-.qty-btn{width:34px;height:34px;border-radius:50%;border:2px solid #E5E7EB;background:white;cursor:pointer;font-size:18px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .2s;}
-.qty-btn:hover{background:#CC0000;color:white;border-color:#CC0000;}
-
-/* Section hidden */
-.sec{display:none;}
-.sec.active{display:block;}
-
-/* Metro sauce/type checkbox */
-.mc-check{display:none;}
-.mc-label{border:2px solid #E5E7EB;border-radius:8px;cursor:pointer;transition:all .2s;padding:8px 10px;font-size:13px;text-align:center;display:block;}
-.mc-check:checked + .mc-label{border-color:#CC0000;background:#FFF0F0;color:#CC0000;}
-
+.step-num{background:var(--red);color:white;width:22px;height:22px;border-radius:50%;font-size:12px;display:inline-flex;align-items:center;justify-content:center;font-weight:900;flex-shrink:0;}
 @media(max-width:640px){
-  .hero{min-height:auto;padding:100px 0 60px;}
   .modal-box{margin:0;border-radius:24px 24px 0 0;position:fixed;bottom:0;left:0;right:0;max-width:100%;max-height:92vh;}
+  .overlay.show{align-items:flex-end;padding-top:0;}
+  .hero{min-height:auto;padding:80px 0 60px;}
+  .hero-grid{grid-template-columns:1fr!important;}
+  .hero-img-col{display:none!important;}
 }
 </style>
 </head>
 <body>
 
-<!-- ===================== HEADER ===================== -->
-<header class="hdr">
+<!-- HEADER -->
+<header class="hdr" id="hdr">
   <div style="max-width:1200px;margin:0 auto;padding:0 16px;height:100%;display:flex;align-items:center;justify-content:space-between;">
-    <!-- Logo -->
     <div style="display:flex;align-items:center;gap:10px;cursor:pointer;" onclick="scrollToMenu()">
-      <div style="width:42px;height:42px;background:linear-gradient(135deg,#CC0000,#FF4444);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 15px rgba(204,0,0,.5);">
-        <i class="fas fa-pizza-slice" style="color:white;font-size:18px;"></i>
+      <div id="logo-wrap" style="width:42px;height:42px;background:linear-gradient(135deg,var(--red),#FF4444);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 15px rgba(204,0,0,.5);overflow:hidden;">
+        <i class="fas fa-pizza-slice" style="color:white;font-size:18px;" id="logo-icon"></i>
       </div>
       <div>
-        <div style="color:white;font-weight:900;font-size:18px;line-height:1.1;">برشتا بيتزا</div>
-        <div style="color:#CC0000;font-size:11px;font-weight:600;">Breshta Pizza</div>
+        <div id="site-name" style="color:white;font-weight:900;font-size:18px;line-height:1.1;">برشتا بيتزا</div>
+        <div id="site-name-en" style="color:var(--red);font-size:11px;font-weight:600;transition:color .3s;">Breshta Pizza</div>
       </div>
     </div>
-    <!-- Right: Cart + Nav -->
-    <div style="display:flex;align-items:center;gap:10px;">
-      <button onclick="scrollToMenu()" style="color:#9CA3AF;background:none;border:none;cursor:pointer;font-family:'Cairo',sans-serif;font-size:13px;font-weight:600;display:none;" id="nav-menu-btn">
-        <i class="fas fa-utensils" style="margin-left:4px;"></i> القائمة
-      </button>
-      <button onclick="openCart()" id="cart-btn" style="position:relative;background:linear-gradient(135deg,#CC0000,#FF4444);color:white;border:none;border-radius:50px;padding:9px 18px;font-weight:700;font-size:13px;cursor:pointer;font-family:'Cairo',sans-serif;display:flex;align-items:center;gap:6px;transition:all .3s;box-shadow:0 4px 15px rgba(204,0,0,.4);">
-        <i class="fas fa-shopping-cart"></i>
-        <span>السلة</span>
-        <span id="cart-count" style="display:none;background:#FFD700;color:#1a1a1a;border-radius:50%;width:20px;height:20px;font-size:11px;font-weight:900;align-items:center;justify-content:center;margin-right:-4px;">0</span>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <a href="admin.html" style="color:#9CA3AF;font-size:12px;font-weight:700;text-decoration:none;padding:6px 10px;border-radius:8px;border:1px solid rgba(255,255,255,.1);" onmouseover="this.style.color='white'" onmouseout="this.style.color='#9CA3AF'"><i class="fas fa-cog" style="margin-left:4px;"></i>إدارة</a>
+      <button onclick="openCart()" id="cart-btn" style="position:relative;background:linear-gradient(135deg,var(--red),#FF4444);color:white;border:none;border-radius:50px;padding:9px 18px;font-weight:700;font-size:13px;cursor:pointer;font-family:'Cairo',sans-serif;display:flex;align-items:center;gap:6px;box-shadow:0 4px 15px rgba(204,0,0,.4);">
+        <i class="fas fa-shopping-cart"></i><span>السلة</span>
+        <span id="cart-count" style="display:none;background:var(--accent);color:#1a1a1a;border-radius:50%;width:20px;height:20px;font-size:11px;font-weight:900;align-items:center;justify-content:center;">0</span>
       </button>
     </div>
   </div>
 </header>
 
-<!-- ===================== HERO ===================== -->
+<!-- HERO -->
 <section class="hero" id="hero" style="position:relative;overflow:hidden;padding:68px 0 0;">
-  <!-- Decorative rings -->
   <div class="hero-ring spin1" style="width:500px;height:500px;right:-120px;top:-120px;"></div>
   <div class="hero-ring spin2" style="width:300px;height:300px;right:-30px;top:-30px;"></div>
-  <div class="hero-ring" style="width:200px;height:200px;left:-60px;bottom:-60px;border-color:rgba(255,255,255,.05);"></div>
-
-  <div style="max-width:1200px;margin:0 auto;padding:80px 24px 100px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;position:relative;z-index:1;">
-    <!-- Text -->
+  <div style="max-width:1200px;margin:0 auto;padding:80px 24px 100px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;position:relative;z-index:1;" class="hero-grid">
     <div>
       <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:50px;padding:6px 16px;margin-bottom:20px;">
         <span style="width:8px;height:8px;background:#4ADE80;border-radius:50%;display:inline-block;animation:pulse 2s infinite;"></span>
         <span style="color:#E5E7EB;font-size:13px;font-weight:600;">نتوصل الآن • توصيل وإستلام</span>
       </div>
-      <h1 style="color:white;font-size:clamp(36px,5vw,64px);font-weight:900;line-height:1.1;margin-bottom:16px;">
+      <h1 style="color:white;font-size:clamp(34px,5vw,62px);font-weight:900;line-height:1.1;margin-bottom:16px;">
         أفضل <span class="gradient-txt">بيتزا</span><br>في عمّان!
       </h1>
-      <p style="color:#D1D5DB;font-size:16px;line-height:1.7;margin-bottom:32px;">عجينة طازجة يومياً، مكونات فاخرة، طعم لا يُنسى.<br>اطلب الآن من أقرب فرع إليك.</p>
+      <p id="hero-tagline" style="color:#D1D5DB;font-size:16px;line-height:1.7;margin-bottom:32px;">عجينة طازجة يومياً، مكونات فاخرة، طعم لا يُنسى.</p>
       <div style="display:flex;gap:12px;flex-wrap:wrap;">
-        <button class="btn-red" onclick="scrollToMenu()" style="padding:14px 28px;border-radius:12px;font-size:16px;display:flex;align-items:center;gap:8px;">
-          <i class="fas fa-fire"></i> اطلب الآن
-        </button>
-        <button class="btn-outline" style="padding:14px 28px;border-radius:12px;font-size:16px;border-color:rgba(255,255,255,.3);color:white;" onclick="scrollToMenu()">
-          <i class="fas fa-list-ul" style="margin-left:6px;"></i> عرض القائمة
-        </button>
+        <button class="btn-red" onclick="scrollToMenu()" style="padding:14px 28px;border-radius:12px;font-size:16px;display:flex;align-items:center;gap:8px;"><i class="fas fa-fire"></i>اطلب الآن</button>
+        <button class="btn-outline" style="padding:14px 28px;border-radius:12px;font-size:16px;" onclick="scrollToMenu()"><i class="fas fa-list-ul" style="margin-left:6px;"></i>عرض القائمة</button>
       </div>
-      <!-- Stats -->
       <div style="display:flex;gap:24px;margin-top:40px;padding-top:32px;border-top:1px solid rgba(255,255,255,.1);">
-        <div style="text-align:center;">
-          <div style="color:#FFD700;font-size:24px;font-weight:900;">+50k</div>
-          <div style="color:#9CA3AF;font-size:12px;">طلب سنوياً</div>
-        </div>
-        <div style="text-align:center;">
-          <div style="color:#FFD700;font-size:24px;font-weight:900;">3</div>
-          <div style="color:#9CA3AF;font-size:12px;">فروع</div>
-        </div>
-        <div style="text-align:center;">
-          <div style="color:#FFD700;font-size:24px;font-weight:900;">★ 4.9</div>
-          <div style="color:#9CA3AF;font-size:12px;">تقييم العملاء</div>
-        </div>
+        <div style="text-align:center;"><div style="color:var(--accent);font-size:24px;font-weight:900;">+50k</div><div style="color:#9CA3AF;font-size:12px;">طلب سنوياً</div></div>
+        <div style="text-align:center;"><div style="color:var(--accent);font-size:24px;font-weight:900;">3</div><div style="color:#9CA3AF;font-size:12px;">فروع</div></div>
+        <div style="text-align:center;"><div style="color:var(--accent);font-size:24px;font-weight:900;">★ 4.9</div><div style="color:#9CA3AF;font-size:12px;">تقييم</div></div>
       </div>
     </div>
-    <!-- Hero Image (CSS Pizza) -->
-    <div style="display:flex;align-items:center;justify-content:center;position:relative;">
-      <div style="width:300px;height:300px;background:radial-gradient(circle,#8B0000,#3D0000);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 20px 60px rgba(204,0,0,.4),0 0 0 20px rgba(204,0,0,.1);">
-        <div style="text-align:center;">
-          <div style="font-size:120px;line-height:1;">🍕</div>
-          <div style="color:rgba(255,255,255,.8);font-size:14px;font-weight:700;margin-top:-10px;">Fresh & Hot</div>
-        </div>
-      </div>
-      <!-- Floating labels -->
-      <div style="position:absolute;top:20px;right:-10px;background:white;border-radius:12px;padding:8px 14px;box-shadow:0 8px 20px rgba(0,0,0,.15);font-size:12px;font-weight:700;color:#CC0000;">
-        <i class="fas fa-clock" style="margin-left:4px;"></i> 25-35 دقيقة
-      </div>
-      <div style="position:absolute;bottom:30px;left:-20px;background:white;border-radius:12px;padding:8px 14px;box-shadow:0 8px 20px rgba(0,0,0,.15);font-size:12px;font-weight:700;color:#22C55E;">
-        <i class="fas fa-check-circle" style="margin-left:4px;"></i> طازج يومياً
+    <div class="hero-img-col" style="display:flex;align-items:center;justify-content:center;">
+      <div style="width:280px;height:280px;background:radial-gradient(circle,#8B0000,#3D0000);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 20px 60px rgba(204,0,0,.4),0 0 0 20px rgba(204,0,0,.1);">
+        <div style="font-size:110px;line-height:1;">🍕</div>
       </div>
     </div>
   </div>
-
-  <!-- Wave Bottom -->
   <div style="position:absolute;bottom:-2px;left:0;right:0;">
-    <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M0 40L60 45C120 50 240 60 360 62C480 64 600 58 720 52C840 46 960 40 1080 40C1200 40 1320 46 1380 49L1440 52V80H1380C1320 80 1200 80 1080 80C960 80 840 80 720 80C600 80 480 80 360 80C240 80 120 80 60 80H0V40Z" fill="#F2F2F2"/>
-    </svg>
+    <svg viewBox="0 0 1440 80" fill="none"><path d="M0 40L60 45C120 50 240 60 360 62C480 64 600 58 720 52C840 46 960 40 1080 40C1200 40 1320 46 1380 49L1440 52V80H0V40Z" fill="#F2F2F2"/></svg>
   </div>
 </section>
 
-<!-- ===================== MENU SECTION ===================== -->
+<!-- MENU -->
 <div id="menu-section" style="max-width:1200px;margin:0 auto;padding:0 16px 60px;">
-
-  <!-- ---- Tab Bar ---- -->
-  <div class="tab-bar" style="border-radius:0 0 16px 16px;margin-bottom:32px;" id="tab-bar">
-    <div style="display:flex;overflow-x:auto;scrollbar-width:none;" id="tabs-container">
-      <div class="tab-item active" onclick="switchTab('pizza')" id="tab-pizza">
-        <i class="fas fa-pizza-slice" style="font-size:16px;"></i>
-        <span>البيتزا</span>
-      </div>
-      <div class="tab-item" onclick="switchTab('offers')" id="tab-offers">
-        <i class="fas fa-percent" style="font-size:16px;"></i>
-        <span>العروض</span>
-      </div>
-      <div class="tab-item" onclick="switchTab('appetizers')" id="tab-appetizers">
-        <i class="fas fa-drumstick-bite" style="font-size:16px;"></i>
-        <span>مقبلات</span>
-      </div>
-      <div class="tab-item" onclick="switchTab('drinks')" id="tab-drinks">
-        <i class="fas fa-glass-water" style="font-size:16px;"></i>
-        <span>مشروبات</span>
-      </div>
-      <div class="tab-item" onclick="switchTab('desserts')" id="tab-desserts">
-        <i class="fas fa-ice-cream" style="font-size:16px;"></i>
-        <span>حلويات</span>
-      </div>
+  <div class="tab-bar" style="border-radius:0 0 16px 16px;margin-bottom:32px;">
+    <div style="display:flex;overflow-x:auto;scrollbar-width:none;">
+      <div class="tab-item active" onclick="switchTab('pizza')" id="tab-pizza"><i class="fas fa-pizza-slice" style="font-size:16px;"></i><span>البيتزا</span></div>
+      <div class="tab-item" onclick="switchTab('offers')" id="tab-offers"><i class="fas fa-percent" style="font-size:16px;"></i><span>العروض</span></div>
+      <div class="tab-item" onclick="switchTab('appetizers')" id="tab-appetizers"><i class="fas fa-drumstick-bite" style="font-size:16px;"></i><span>مقبلات</span></div>
+      <div class="tab-item" onclick="switchTab('drinks')" id="tab-drinks"><i class="fas fa-glass-water" style="font-size:16px;"></i><span>مشروبات</span></div>
+      <div class="tab-item" onclick="switchTab('desserts')" id="tab-desserts"><i class="fas fa-ice-cream" style="font-size:16px;"></i><span>حلويات</span></div>
     </div>
   </div>
 
-  <!-- ============== PIZZA SECTION ============== -->
   <div class="sec active" id="sec-pizza">
-    <div style="margin-bottom:28px;">
-      <h2 style="font-size:26px;font-weight:900;color:#1a1a1a;">🍕 قائمة البيتزا</h2>
-      <p style="color:#6B7280;font-size:14px;">اختر بيتزاك المفضلة وخصصها كما تريد</p>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;" id="pizza-grid">
-      <!-- Generated by JS -->
-    </div>
-
-    <!-- Metro Section -->
-    <div style="margin-top:48px;margin-bottom:20px;">
+    <div style="margin-bottom:24px;"><h2 style="font-size:24px;font-weight:900;">🍕 قائمة البيتزا</h2><p style="color:#6B7280;font-size:14px;">اختر وخصص بيتزاك</p></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;" id="pizza-grid"></div>
+    <div style="margin-top:48px;">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
-        <div style="flex:1;height:2px;background:linear-gradient(90deg,#CC0000,transparent);"></div>
-        <h2 style="font-size:22px;font-weight:900;color:#1a1a1a;white-space:nowrap;">⚡ العروض الخاصة - مترو</h2>
-        <div style="flex:1;height:2px;background:linear-gradient(270deg,#CC0000,transparent);"></div>
+        <div style="flex:1;height:2px;background:linear-gradient(90deg,var(--red),transparent);"></div>
+        <h2 style="font-size:20px;font-weight:900;white-space:nowrap;">⚡ العروض الخاصة</h2>
+        <div style="flex:1;height:2px;background:linear-gradient(270deg,var(--red),transparent);"></div>
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;">
-        <!-- Metro Pizza -->
-        <div class="metro-card-bg" style="border-radius:20px;padding:24px;color:white;cursor:pointer;transition:all .3s;position:relative;overflow:hidden;" onclick="openMetroModal('metro')" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 16px 40px rgba(0,0,0,.4)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
-          <div style="position:absolute;top:-20px;left:-20px;width:120px;height:120px;background:rgba(255,255,255,.04);border-radius:50%;"></div>
-          <div style="position:absolute;bottom:-30px;right:-30px;width:160px;height:160px;background:rgba(255,255,255,.03);border-radius:50%;"></div>
+        <div class="metro-bg" style="border-radius:20px;padding:24px;color:white;cursor:pointer;transition:all .3s;" onclick="openMetroModal('metro')" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform=''">
           <div style="font-size:48px;margin-bottom:12px;">📏🍕</div>
           <h3 style="font-size:20px;font-weight:900;margin-bottom:6px;">بيتزا مترو</h3>
-          <p style="color:#D1D5DB;font-size:13px;line-height:1.6;margin-bottom:16px;">متر كامل من البيتزا! 3 أنواع بيتزا + 3 صلصات تغميس</p>
+          <p style="color:#D1D5DB;font-size:13px;margin-bottom:16px;">متر كامل - 3 أنواع + 3 صلصات</p>
           <div style="display:flex;align-items:center;justify-content:space-between;">
-            <div>
-              <span style="font-size:28px;font-weight:900;color:#FFD700;">13</span>
-              <span style="font-size:14px;color:#D1D5DB;margin-right:4px;">د.أ</span>
-            </div>
-            <button class="btn-red" style="padding:8px 18px;border-radius:8px;font-size:13px;" onclick="event.stopPropagation();openMetroModal('metro')">اطلب الآن</button>
+            <div><span style="font-size:28px;font-weight:900;color:var(--accent);">13</span><span style="font-size:14px;color:#D1D5DB;margin-right:4px;">د.أ</span></div>
+            <button class="btn-red" style="padding:8px 18px;border-radius:8px;font-size:13px;" onclick="event.stopPropagation();openMetroModal('metro')">اطلب</button>
           </div>
         </div>
-        <!-- Super Metro -->
-        <div class="metro-card-bg" style="border-radius:20px;padding:24px;color:white;cursor:pointer;transition:all .3s;position:relative;overflow:hidden;border:2px solid rgba(255,215,0,.3);" onclick="openMetroModal('super')" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 16px 40px rgba(0,0,0,.4)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
-          <div style="position:absolute;top:0;right:0;background:linear-gradient(135deg,#FFD700,#F59E0B);color:#1a1a1a;font-size:11px;font-weight:900;padding:6px 14px;border-radius:0 18px 0 12px;">⭐ الأكثر قيمة</div>
-          <div style="position:absolute;top:-20px;left:-20px;width:120px;height:120px;background:rgba(255,215,0,.04);border-radius:50%;"></div>
+        <div class="metro-bg" style="border-radius:20px;padding:24px;color:white;cursor:pointer;transition:all .3s;border:2px solid rgba(255,215,0,.3);" onclick="openMetroModal('super')" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform=''">
+          <div style="font-size:10px;background:linear-gradient(135deg,var(--accent),#F59E0B);color:#1a1a1a;font-weight:900;padding:4px 12px;border-radius:50px;display:inline-block;margin-bottom:8px;">⭐ الأكثر قيمة</div>
           <div style="font-size:48px;margin-bottom:12px;">🦸🍕</div>
           <h3 style="font-size:20px;font-weight:900;margin-bottom:6px;">سوبر مترو</h3>
-          <p style="color:#D1D5DB;font-size:13px;line-height:1.6;margin-bottom:16px;">متر بيتزا + كوكيز + باستا ألفريدو + بطاطا أوتار + 3 صلصات</p>
+          <p style="color:#D1D5DB;font-size:13px;margin-bottom:16px;">متر بيتزا + كوكيز + باستا + أوتار</p>
           <div style="display:flex;align-items:center;justify-content:space-between;">
-            <div>
-              <span style="font-size:28px;font-weight:900;color:#FFD700;">19</span>
-              <span style="font-size:14px;color:#D1D5DB;margin-right:4px;">د.أ</span>
-            </div>
-            <button class="btn-red" style="padding:8px 18px;border-radius:8px;font-size:13px;" onclick="event.stopPropagation();openMetroModal('super')">اطلب الآن</button>
+            <div><span style="font-size:28px;font-weight:900;color:var(--accent);">19</span><span style="font-size:14px;color:#D1D5DB;margin-right:4px;">د.أ</span></div>
+            <button class="btn-red" style="padding:8px 18px;border-radius:8px;font-size:13px;" onclick="event.stopPropagation();openMetroModal('super')">اطلب</button>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ============== OFFERS SECTION ============== -->
-  <div class="sec" id="sec-offers">
-    <div style="margin-bottom:28px;">
-      <h2 style="font-size:26px;font-weight:900;">🔥 العروض والوجبات</h2>
-      <p style="color:#6B7280;font-size:14px;">أفضل العروض بأفضل الأسعار</p>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;" id="offers-grid">
-    </div>
-  </div>
-
-  <!-- ============== APPETIZERS SECTION ============== -->
-  <div class="sec" id="sec-appetizers">
-    <div style="margin-bottom:28px;">
-      <h2 style="font-size:26px;font-weight:900;">🍟 المقبلات</h2>
-      <p style="color:#6B7280;font-size:14px;">مقبلات طازجة ولذيذة</p>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;" id="appetizers-grid">
-    </div>
-  </div>
-
-  <!-- ============== DRINKS SECTION ============== -->
-  <div class="sec" id="sec-drinks">
-    <div style="margin-bottom:28px;">
-      <h2 style="font-size:26px;font-weight:900;">🥤 المشروبات</h2>
-      <p style="color:#6B7280;font-size:14px;">مشروبات منعشة لتكمل وجبتك</p>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;" id="drinks-grid">
-    </div>
-  </div>
-
-  <!-- ============== DESSERTS SECTION ============== -->
-  <div class="sec" id="sec-desserts">
-    <div style="margin-bottom:28px;">
-      <h2 style="font-size:26px;font-weight:900;">🍰 الحلويات</h2>
-      <p style="color:#6B7280;font-size:14px;">حلويات رائعة لإنهاء وجبتك بحلاوة</p>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;" id="desserts-grid">
-    </div>
-  </div>
-
+  <div class="sec" id="sec-offers"><div style="margin-bottom:24px;"><h2 style="font-size:24px;font-weight:900;">🔥 العروض</h2></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;" id="offers-grid"></div></div>
+  <div class="sec" id="sec-appetizers"><div style="margin-bottom:24px;"><h2 style="font-size:24px;font-weight:900;">🍟 المقبلات</h2></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;" id="appetizers-grid"></div></div>
+  <div class="sec" id="sec-drinks"><div style="margin-bottom:24px;"><h2 style="font-size:24px;font-weight:900;">🥤 المشروبات</h2></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;" id="drinks-grid"></div></div>
+  <div class="sec" id="sec-desserts"><div style="margin-bottom:24px;"><h2 style="font-size:24px;font-weight:900;">🍰 الحلويات</h2></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;" id="desserts-grid"></div></div>
 </div>
 
-<!-- ===================== FOOTER ===================== -->
-<footer style="background:#1a1a1a;color:white;padding:48px 24px 24px;">
+<!-- FOOTER -->
+<footer style="background:var(--secondary);color:white;padding:40px 24px 20px;transition:background .3s;">
   <div style="max-width:1200px;margin:0 auto;">
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:32px;margin-bottom:32px;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:28px;margin-bottom:28px;">
       <div>
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
-          <div style="width:40px;height:40px;background:linear-gradient(135deg,#CC0000,#FF4444);border-radius:50%;display:flex;align-items:center;justify-content:center;">
-            <i class="fas fa-pizza-slice" style="color:white;font-size:16px;"></i>
-          </div>
-          <div>
-            <div style="font-weight:900;font-size:16px;">برشتا بيتزا</div>
-            <div style="color:#CC0000;font-size:11px;">Breshta Pizza</div>
-          </div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div id="footer-logo" style="width:38px;height:38px;background:linear-gradient(135deg,var(--red),#FF4444);border-radius:50%;display:flex;align-items:center;justify-content:center;overflow:hidden;"><i class="fas fa-pizza-slice" style="color:white;font-size:15px;"></i></div>
+          <div><div id="footer-name" style="font-weight:900;font-size:15px;">برشتا بيتزا</div><div style="color:var(--red);font-size:10px;">Breshta Pizza</div></div>
         </div>
-        <p style="color:#9CA3AF;font-size:13px;line-height:1.7;">أفضل بيتزا في عمّان منذ سنوات. عجينة طازجة يومياً ومكونات عالية الجودة.</p>
+        <p style="color:#9CA3AF;font-size:13px;line-height:1.7;">أفضل بيتزا في عمّان. عجينة طازجة ومكونات عالية الجودة.</p>
       </div>
       <div>
-        <h3 style="font-weight:800;margin-bottom:14px;font-size:15px;">فروعنا</h3>
-        <div style="display:flex;flex-direction:column;gap:10px;">
-          <div style="color:#9CA3AF;font-size:13px;display:flex;align-items:center;gap:8px;"><i class="fas fa-map-marker-alt" style="color:#CC0000;width:16px;"></i> شارع المدينة المنورة</div>
-          <div style="color:#9CA3AF;font-size:13px;display:flex;align-items:center;gap:8px;"><i class="fas fa-map-marker-alt" style="color:#CC0000;width:16px;"></i> طبربور</div>
-          <div style="color:#9CA3AF;font-size:13px;display:flex;align-items:center;gap:8px;"><i class="fas fa-map-marker-alt" style="color:#CC0000;width:16px;"></i> شارع الإذاعة</div>
+        <h3 style="font-weight:800;margin-bottom:12px;font-size:14px;">فروعنا</h3>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="color:#9CA3AF;font-size:12px;display:flex;align-items:center;gap:6px;"><i class="fas fa-map-marker-alt" style="color:var(--red);width:14px;"></i>شارع المدينة المنورة</div>
+          <div style="color:#9CA3AF;font-size:12px;display:flex;align-items:center;gap:6px;"><i class="fas fa-map-marker-alt" style="color:var(--red);width:14px;"></i>طبربور</div>
+          <div style="color:#9CA3AF;font-size:12px;display:flex;align-items:center;gap:6px;"><i class="fas fa-map-marker-alt" style="color:var(--red);width:14px;"></i>شارع الإذاعة</div>
         </div>
       </div>
       <div>
-        <h3 style="font-weight:800;margin-bottom:14px;font-size:15px;">اتصل بنا</h3>
-        <div style="display:flex;flex-direction:column;gap:10px;">
-          <div style="color:#9CA3AF;font-size:13px;display:flex;align-items:center;gap:8px;"><i class="fas fa-phone" style="color:#CC0000;width:16px;"></i> 0791234567</div>
-          <div style="color:#9CA3AF;font-size:13px;display:flex;align-items:center;gap:8px;"><i class="fab fa-whatsapp" style="color:#25D366;width:16px;"></i> واتساب: 0791234567</div>
-          <div style="color:#9CA3AF;font-size:13px;display:flex;align-items:center;gap:8px;"><i class="fas fa-clock" style="color:#CC0000;width:16px;"></i> 12:00 - 01:00 صباحاً</div>
-        </div>
-      </div>
-      <div>
-        <h3 style="font-weight:800;margin-bottom:14px;font-size:15px;">تابعنا</h3>
-        <div style="display:flex;gap:10px;margin-bottom:16px;">
-          <a href="#" style="width:38px;height:38px;background:#CC0000;border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-size:16px;transition:all .2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform=''"><i class="fab fa-instagram"></i></a>
-          <a href="#" style="width:38px;height:38px;background:#1877F2;border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-size:16px;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform=''"><i class="fab fa-facebook-f"></i></a>
-          <a href="#" style="width:38px;height:38px;background:#25D366;border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-size:16px;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform=''"><i class="fab fa-whatsapp"></i></a>
-          <a href="#" style="width:38px;height:38px;background:#FF0000;border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-size:16px;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform=''"><i class="fab fa-tiktok"></i></a>
-        </div>
-        <div style="background:rgba(255,255,255,.06);border-radius:10px;padding:12px;font-size:12px;color:#9CA3AF;text-align:center;">
-          <i class="fas fa-shield-alt" style="color:#22C55E;margin-left:4px;"></i>
-          دفع آمن ومضمون
+        <h3 style="font-weight:800;margin-bottom:12px;font-size:14px;">اتصل بنا</h3>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="color:#9CA3AF;font-size:12px;display:flex;align-items:center;gap:6px;"><i class="fas fa-phone" style="color:var(--red);width:14px;"></i>0791234567</div>
+          <div style="color:#9CA3AF;font-size:12px;display:flex;align-items:center;gap:6px;"><i class="fab fa-whatsapp" style="color:#25D366;width:14px;"></i>0791234567</div>
+          <div style="color:#9CA3AF;font-size:12px;display:flex;align-items:center;gap:6px;"><i class="fas fa-clock" style="color:var(--red);width:14px;"></i>12:00 - 01:00 ص</div>
         </div>
       </div>
     </div>
-    <div style="border-top:1px solid rgba(255,255,255,.08);padding-top:20px;text-align:center;color:#6B7280;font-size:12px;">
-      © 2025 برشتا بيتزا. جميع الحقوق محفوظة.
-    </div>
+    <div style="border-top:1px solid rgba(255,255,255,.08);padding-top:16px;text-align:center;color:#6B7280;font-size:12px;">© 2025 برشتا بيتزا. جميع الحقوق محفوظة.</div>
   </div>
 </footer>
 
-<!-- ===================== PIZZA CUSTOMIZER MODAL ===================== -->
+<!-- PIZZA MODAL -->
 <div class="overlay" id="pizza-overlay" onclick="closePizzaModal()">
-  <div class="modal-box" onclick="event.stopPropagation()" style="padding:0;">
-    <!-- Header -->
-    <div style="background:linear-gradient(135deg,#1a1a1a,#5c0000);padding:24px;border-radius:24px 24px 0 0;position:relative;">
-      <button onclick="closePizzaModal()" style="position:absolute;top:14px;left:14px;width:32px;height:32px;background:rgba(255,255,255,.15);border:none;border-radius:50%;color:white;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;"><i class="fas fa-times"></i></button>
-      <div style="text-align:center;">
-        <div style="font-size:48px;margin-bottom:8px;">🍕</div>
-        <h2 style="color:white;font-size:22px;font-weight:900;" id="pizza-modal-title">خصص بيتزاك</h2>
-        <p style="color:#D1D5DB;font-size:13px;" id="pizza-modal-sub">اختر الحجم والعجينة</p>
+<div class="modal-box" onclick="event.stopPropagation()" style="padding:0;">
+  <div style="background:linear-gradient(135deg,#1a1a1a,#5c0000);padding:20px;border-radius:24px 24px 0 0;position:relative;">
+    <button onclick="closePizzaModal()" style="position:absolute;top:12px;left:12px;width:30px;height:30px;background:rgba(255,255,255,.15);border:none;border-radius:50%;color:white;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;"><i class="fas fa-times"></i></button>
+    <div style="text-align:center;"><div style="font-size:44px;margin-bottom:6px;" id="pizza-modal-emoji">🍕</div>
+      <h2 style="color:white;font-size:20px;font-weight:900;" id="pizza-modal-title">خصص بيتزاك</h2></div>
+  </div>
+  <div style="padding:18px;">
+    <div style="margin-bottom:18px;">
+      <h3 style="font-weight:800;margin-bottom:10px;font-size:14px;display:flex;align-items:center;gap:6px;"><span class="step-num">1</span>نوع البيتزا</h3>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;" id="pizza-types-grid"></div>
+    </div>
+    <div id="pizzasta-extra" style="display:none;margin-bottom:16px;background:#FFF8E1;border-radius:12px;padding:14px;border:2px solid #F59E0B;">
+      <h3 style="font-weight:800;margin-bottom:10px;font-size:13px;color:#92400E;"><i class="fas fa-ring" style="color:#F59E0B;margin-left:6px;"></i>نوع بيتزا الحافة الخارجية</h3>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;" id="pizzasta-outer-grid"></div>
+    </div>
+    <div style="margin-bottom:18px;">
+      <h3 style="font-weight:800;margin-bottom:10px;font-size:14px;display:flex;align-items:center;gap:6px;"><span class="step-num">2</span>الحجم</h3>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+        <div class="size-btn" id="size-small" onclick="selectSize('small')"><div style="font-size:20px;">🍕</div><div style="font-weight:800;font-size:13px;">صغير</div><div style="font-weight:900;color:var(--red);font-size:15px;margin-top:2px;">3 د.أ</div></div>
+        <div class="size-btn" id="size-medium" onclick="selectSize('medium')"><div style="font-size:26px;">🍕</div><div style="font-weight:800;font-size:13px;">وسط</div><div style="font-weight:900;color:var(--red);font-size:15px;margin-top:2px;">5 د.أ</div></div>
+        <div class="size-btn" id="size-large" onclick="selectSize('large')"><div style="font-size:32px;">🍕</div><div style="font-weight:800;font-size:13px;">كبير</div><div style="font-weight:900;color:var(--red);font-size:15px;margin-top:2px;">7 د.أ</div></div>
       </div>
     </div>
-
-    <div style="padding:20px;">
-      <!-- Pizza Type -->
-      <div style="margin-bottom:20px;">
-        <h3 style="font-weight:800;margin-bottom:12px;font-size:15px;color:#1a1a1a;display:flex;align-items:center;gap:6px;">
-          <span style="background:#CC0000;color:white;width:22px;height:22px;border-radius:50%;font-size:12px;display:inline-flex;align-items:center;justify-content:center;font-weight:900;">1</span>
-          نوع البيتزا
-        </h3>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;" id="pizza-types-grid">
-          <!-- Filled by JS -->
-        </div>
-      </div>
-
-      <!-- Pizzasta outer type (shown only when Pizzasta selected) -->
-      <div id="pizzasta-extra" style="display:none;margin-bottom:20px;background:#FFF8E1;border-radius:12px;padding:16px;border:2px solid #F59E0B;">
-        <h3 style="font-weight:800;margin-bottom:12px;font-size:14px;color:#92400E;display:flex;align-items:center;gap:6px;">
-          <i class="fas fa-ring" style="color:#F59E0B;"></i>
-          اختر نوع البيتزا للحافة الخارجية (الحلقة)
-        </h3>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;" id="pizzasta-outer-grid">
-          <!-- Filled by JS -->
-        </div>
-      </div>
-
-      <!-- Size -->
-      <div style="margin-bottom:20px;">
-        <h3 style="font-weight:800;margin-bottom:12px;font-size:15px;color:#1a1a1a;display:flex;align-items:center;gap:6px;">
-          <span style="background:#CC0000;color:white;width:22px;height:22px;border-radius:50%;font-size:12px;display:inline-flex;align-items:center;justify-content:center;font-weight:900;">2</span>
-          الحجم
-        </h3>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
-          <div class="size-btn" id="size-small" onclick="selectSize('small')">
-            <div style="font-size:22px;">🍕</div>
-            <div style="font-weight:800;font-size:14px;">صغير</div>
-            <div style="font-size:12px;color:#6B7280;">Small</div>
-            <div style="font-weight:900;color:#CC0000;font-size:16px;margin-top:4px;">3 د.أ</div>
-          </div>
-          <div class="size-btn" id="size-medium" onclick="selectSize('medium')">
-            <div style="font-size:28px;">🍕</div>
-            <div style="font-weight:800;font-size:14px;">وسط</div>
-            <div style="font-size:12px;color:#6B7280;">Medium</div>
-            <div style="font-weight:900;color:#CC0000;font-size:16px;margin-top:4px;">5 د.أ</div>
-          </div>
-          <div class="size-btn" id="size-large" onclick="selectSize('large')">
-            <div style="font-size:34px;">🍕</div>
-            <div style="font-weight:800;font-size:14px;">كبير</div>
-            <div style="font-size:12px;color:#6B7280;">Large</div>
-            <div style="font-weight:900;color:#CC0000;font-size:16px;margin-top:4px;">7 د.أ</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Crust -->
-      <div style="margin-bottom:20px;">
-        <h3 style="font-weight:800;margin-bottom:12px;font-size:15px;color:#1a1a1a;display:flex;align-items:center;gap:6px;">
-          <span style="background:#CC0000;color:white;width:22px;height:22px;border-radius:50%;font-size:12px;display:inline-flex;align-items:center;justify-content:center;font-weight:900;">3</span>
-          نوع العجينة
-        </h3>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;" id="crusts-grid">
-          <div style="color:#9CA3AF;font-size:13px;grid-column:1/-1;text-align:center;padding:10px;">اختر الحجم أولاً</div>
-        </div>
-      </div>
-
-      <!-- Quantity & Price -->
-      <div style="background:#F9FAFB;border-radius:14px;padding:16px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;">
-        <div>
-          <div style="font-size:12px;color:#6B7280;margin-bottom:2px;">الكمية</div>
-          <div style="display:flex;align-items:center;gap:12px;">
-            <button class="qty-btn" onclick="changeQty(-1)">−</button>
-            <span id="pizza-qty" style="font-size:20px;font-weight:900;min-width:30px;text-align:center;">1</span>
-            <button class="qty-btn" onclick="changeQty(1)">+</button>
-          </div>
-        </div>
-        <div style="text-align:left;">
-          <div style="font-size:12px;color:#6B7280;margin-bottom:2px;">الإجمالي</div>
-          <div id="pizza-price" style="font-size:30px;font-weight:900;color:#CC0000;">— د.أ</div>
-        </div>
-      </div>
-
-      <!-- Add to Cart -->
-      <button class="btn-red" onclick="addPizzaToCart()" style="width:100%;padding:16px;border-radius:12px;font-size:16px;display:flex;align-items:center;justify-content:center;gap:10px;" id="pizza-add-btn">
-        <i class="fas fa-cart-plus"></i>
-        أضف للسلة
-      </button>
+    <div style="margin-bottom:18px;">
+      <h3 style="font-weight:800;margin-bottom:10px;font-size:14px;display:flex;align-items:center;gap:6px;"><span class="step-num">3</span>العجينة</h3>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;" id="crusts-grid"><div style="color:#9CA3AF;font-size:12px;grid-column:1/-1;text-align:center;padding:8px;">اختر الحجم أولاً</div></div>
     </div>
+    <div style="margin-bottom:18px;">
+      <h3 style="font-weight:800;margin-bottom:4px;font-size:14px;display:flex;align-items:center;gap:6px;"><span class="step-num">4</span>المكونات</h3>
+      <p style="font-size:12px;color:#6B7280;margin-bottom:8px;">إلغِ تحديد أي مكوّن لحذفه</p>
+      <div id="default-toppings-list" style="background:#F9FAFB;border-radius:10px;padding:4px 8px;border:1px solid #E5E7EB;margin-bottom:10px;"></div>
+      <div id="extra-toppings-section" style="display:none;">
+        <h4 style="font-weight:800;font-size:13px;margin-bottom:8px;color:#374151;display:flex;align-items:center;gap:6px;"><i class="fas fa-plus-circle" style="color:var(--red);"></i>إضافات مدفوعة</h4>
+        <div id="extra-toppings-list"></div>
+      </div>
+    </div>
+    <div style="background:#F9FAFB;border-radius:14px;padding:14px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-size:11px;color:#6B7280;margin-bottom:4px;">الكمية</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <button class="qty-btn" onclick="changeQty(-1)">−</button>
+          <span id="pizza-qty" style="font-size:20px;font-weight:900;min-width:28px;text-align:center;">1</span>
+          <button class="qty-btn" onclick="changeQty(1)">+</button>
+        </div>
+      </div>
+      <div style="text-align:left;">
+        <div style="font-size:11px;color:#6B7280;margin-bottom:2px;">الإجمالي</div>
+        <div id="pizza-price" style="font-size:28px;font-weight:900;color:var(--red);">— د.أ</div>
+      </div>
+    </div>
+    <button class="btn-red" onclick="addPizzaToCart()" style="width:100%;padding:14px;border-radius:12px;font-size:15px;display:flex;align-items:center;justify-content:center;gap:8px;"><i class="fas fa-cart-plus"></i>أضف للسلة</button>
   </div>
 </div>
+</div>
 
-<!-- ===================== METRO MODAL ===================== -->
+<!-- METRO MODAL -->
 <div class="overlay" id="metro-overlay" onclick="closeMetroModal()">
-  <div class="modal-box" onclick="event.stopPropagation()" style="padding:0;">
-    <div style="background:linear-gradient(135deg,#0d0d0d,#6B0000);padding:24px;border-radius:24px 24px 0 0;position:relative;">
-      <button onclick="closeMetroModal()" style="position:absolute;top:14px;left:14px;width:32px;height:32px;background:rgba(255,255,255,.15);border:none;border-radius:50%;color:white;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;"><i class="fas fa-times"></i></button>
-      <div style="text-align:center;">
-        <div style="font-size:48px;margin-bottom:8px;" id="metro-modal-icon">📏🍕</div>
-        <h2 style="color:white;font-size:22px;font-weight:900;" id="metro-modal-title">بيتزا مترو</h2>
-        <p style="color:#D1D5DB;font-size:13px;" id="metro-modal-desc">متر كامل من البيتزا - 3 أنواع + 3 صلصات</p>
+<div class="modal-box" onclick="event.stopPropagation()" style="padding:0;">
+  <div style="background:linear-gradient(135deg,#0d0d0d,#6B0000);padding:20px;border-radius:24px 24px 0 0;position:relative;">
+    <button onclick="closeMetroModal()" style="position:absolute;top:12px;left:12px;width:30px;height:30px;background:rgba(255,255,255,.15);border:none;border-radius:50%;color:white;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;"><i class="fas fa-times"></i></button>
+    <div style="text-align:center;"><div style="font-size:44px;margin-bottom:6px;" id="metro-modal-icon">📏🍕</div>
+      <h2 style="color:white;font-size:20px;font-weight:900;" id="metro-modal-title">بيتزا مترو</h2>
+      <p style="color:#D1D5DB;font-size:12px;" id="metro-modal-desc">متر كامل - 3 أنواع + 3 صلصات</p></div>
+  </div>
+  <div style="padding:18px;">
+    <div style="margin-bottom:16px;">
+      <h3 style="font-weight:800;margin-bottom:4px;font-size:14px;">اختر 3 أنواع بيتزا <span style="color:var(--red);">*</span></h3>
+      <p style="font-size:11px;color:#9CA3AF;margin-bottom:8px;">حدد بالضبط 3 أنواع</p>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;" id="metro-types-grid"></div>
+    </div>
+    <div style="margin-bottom:16px;">
+      <h3 style="font-weight:800;margin-bottom:4px;font-size:14px;">اختر 3 صلصات <span style="color:var(--red);">*</span></h3>
+      <p style="font-size:11px;color:#9CA3AF;margin-bottom:8px;">حدد بالضبط 3 صلصات</p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;" id="metro-sauces-grid"></div>
+    </div>
+    <div style="margin-bottom:16px;">
+      <h3 style="font-weight:800;margin-bottom:10px;font-size:14px;">العجينة</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="crust-btn sel" id="metro-crust-pan" onclick="selectMetroCrust('pan')" style="text-align:center;padding:12px;"><div style="font-weight:800;">بان / سميكة</div><div style="font-size:11px;margin-top:2px;">بدون رسوم</div></div>
+        <div class="crust-btn" id="metro-crust-stuffed" onclick="selectMetroCrust('stuffed')" style="text-align:center;padding:12px;"><div style="font-weight:800;">محشية الأطراف</div><div style="font-size:11px;margin-top:2px;color:var(--red);">+4.50 د.أ</div></div>
       </div>
     </div>
-    <div style="padding:20px;">
-      <!-- 3 Pizza Types -->
-      <div style="margin-bottom:20px;">
-        <h3 style="font-weight:800;margin-bottom:4px;font-size:15px;">اختر 3 أنواع بيتزا <span style="color:#CC0000;">*</span></h3>
-        <p style="font-size:12px;color:#6B7280;margin-bottom:10px;">اختر بالضبط 3 أنواع</p>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;" id="metro-types-grid"></div>
-      </div>
-
-      <!-- 3 Sauces -->
-      <div style="margin-bottom:20px;">
-        <h3 style="font-weight:800;margin-bottom:4px;font-size:15px;">اختر 3 صلصات تغميس <span style="color:#CC0000;">*</span></h3>
-        <p style="font-size:12px;color:#6B7280;margin-bottom:10px;">اختر بالضبط 3 صلصات</p>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;" id="metro-sauces-grid"></div>
-      </div>
-
-      <!-- Crust -->
-      <div style="margin-bottom:20px;">
-        <h3 style="font-weight:800;margin-bottom:12px;font-size:15px;">نوع العجينة</h3>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-          <div class="crust-btn sel" id="metro-crust-pan" onclick="selectMetroCrust('pan')" style="text-align:center;padding:12px;">
-            <div style="font-weight:800;">بان / سميكة</div>
-            <div style="font-size:11px;margin-top:2px;">بدون رسوم إضافية</div>
-          </div>
-          <div class="crust-btn" id="metro-crust-stuffed" onclick="selectMetroCrust('stuffed')" style="text-align:center;padding:12px;">
-            <div style="font-weight:800;">محشية الأطراف</div>
-            <div style="font-size:11px;margin-top:2px;color:#CC0000;">+4.50 د.أ</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Price & Add -->
-      <div style="background:#F9FAFB;border-radius:14px;padding:16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;">
-        <div>
-          <div style="font-size:12px;color:#6B7280;">الإجمالي</div>
-          <div id="metro-price" style="font-size:28px;font-weight:900;color:#CC0000;">13 د.أ</div>
-        </div>
-        <div id="metro-extras-info" style="font-size:13px;color:#6B7280;text-align:left;"></div>
-      </div>
-
-      <button class="btn-red" onclick="addMetroToCart()" style="width:100%;padding:16px;border-radius:12px;font-size:16px;display:flex;align-items:center;justify-content:center;gap:10px;">
-        <i class="fas fa-cart-plus"></i>
-        أضف للسلة
-      </button>
+    <div style="background:#F9FAFB;border-radius:12px;padding:14px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-weight:900;font-size:26px;color:var(--red);" id="metro-price">13 د.أ</div>
+      <div id="metro-extras-info" style="font-size:12px;color:#6B7280;"></div>
     </div>
+    <button class="btn-red" onclick="addMetroToCart()" style="width:100%;padding:14px;border-radius:12px;font-size:15px;display:flex;align-items:center;justify-content:center;gap:8px;"><i class="fas fa-cart-plus"></i>أضف للسلة</button>
   </div>
 </div>
+</div>
 
-<!-- ===================== CART SIDEBAR ===================== -->
+<!-- CART -->
 <div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
 <div class="cart-panel" id="cart-panel">
   <div style="display:flex;flex-direction:column;height:100%;">
-    <!-- Cart Header -->
-    <div style="background:linear-gradient(135deg,#1a1a1a,#CC0000);padding:20px 16px;color:white;flex-shrink:0;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-        <h2 style="font-size:20px;font-weight:900;display:flex;align-items:center;gap:8px;">
-          <i class="fas fa-shopping-cart"></i> سلة الطلبات
-        </h2>
-        <button onclick="closeCart()" style="background:rgba(255,255,255,.2);border:none;color:white;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;"><i class="fas fa-times"></i></button>
+    <div style="background:linear-gradient(135deg,#1a1a1a,var(--red));padding:18px 16px;color:white;flex-shrink:0;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+        <h2 style="font-size:18px;font-weight:900;display:flex;align-items:center;gap:8px;"><i class="fas fa-shopping-cart"></i>سلة الطلبات</h2>
+        <button onclick="closeCart()" style="background:rgba(255,255,255,.2);border:none;color:white;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;"><i class="fas fa-times"></i></button>
       </div>
-      <p id="cart-items-count" style="font-size:13px;color:rgba(255,255,255,.7);"></p>
+      <p id="cart-items-count" style="font-size:12px;color:rgba(255,255,255,.7);"></p>
     </div>
-
-    <!-- Cart Items -->
-    <div style="flex:1;overflow-y:auto;padding:16px;" id="cart-items-container">
-      <div id="cart-empty" style="text-align:center;padding:60px 20px;">
-        <div style="font-size:64px;margin-bottom:16px;">🛒</div>
-        <p style="font-size:16px;font-weight:700;color:#1a1a1a;margin-bottom:8px;">السلة فارغة</p>
-        <p style="font-size:13px;color:#9CA3AF;">أضف بيتزاك المفضلة الآن!</p>
-        <button class="btn-red" onclick="closeCart()" style="margin-top:16px;padding:10px 24px;border-radius:10px;font-size:14px;">تصفح القائمة</button>
-      </div>
-      <div id="cart-items-list" style="display:flex;flex-direction:column;gap:12px;"></div>
+    <div style="flex:1;overflow-y:auto;padding:14px;">
+      <div id="cart-empty" style="text-align:center;padding:50px 20px;"><div style="font-size:56px;margin-bottom:12px;">🛒</div><p style="font-size:15px;font-weight:700;margin-bottom:6px;">السلة فارغة</p><p style="font-size:12px;color:#9CA3AF;">أضف بيتزاك المفضلة!</p><button class="btn-red" onclick="closeCart()" style="margin-top:14px;padding:10px 22px;border-radius:10px;font-size:13px;">تصفح القائمة</button></div>
+      <div id="cart-items-list" style="display:flex;flex-direction:column;gap:10px;"></div>
     </div>
-
-    <!-- Cart Footer -->
-    <div id="cart-footer" style="display:none;padding:16px;border-top:1px solid #E5E7EB;flex-shrink:0;background:white;">
-      <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
-        <span style="color:#6B7280;font-size:14px;">المجموع الجزئي</span>
-        <span id="cart-subtotal" style="font-weight:700;"></span>
+    <div id="cart-footer" style="display:none;padding:14px;border-top:1px solid #E5E7EB;flex-shrink:0;">
+      <div style="display:flex;justify-content:space-between;margin-bottom:12px;padding-top:6px;border-top:2px solid #E5E7EB;">
+        <span style="font-weight:800;font-size:15px;">الإجمالي</span>
+        <span id="cart-total" style="font-weight:900;font-size:20px;color:var(--red);"></span>
       </div>
-      <div style="display:flex;justify-content:space-between;margin-bottom:16px;padding-top:8px;border-top:2px solid #E5E7EB;">
-        <span style="font-weight:800;font-size:16px;">الإجمالي</span>
-        <span id="cart-total" style="font-weight:900;font-size:20px;color:#CC0000;"></span>
-      </div>
-      <button class="btn-red" onclick="openCheckout()" style="width:100%;padding:16px;border-radius:12px;font-size:16px;display:flex;align-items:center;justify-content:center;gap:8px;">
-        <i class="fas fa-credit-card"></i> إتمام الطلب
-      </button>
+      <button class="btn-red" onclick="openCheckout()" style="width:100%;padding:14px;border-radius:12px;font-size:15px;display:flex;align-items:center;justify-content:center;gap:8px;"><i class="fas fa-credit-card"></i>إتمام الطلب</button>
     </div>
   </div>
 </div>
 
-<!-- ===================== CHECKOUT MODAL ===================== -->
+<!-- CHECKOUT -->
 <div class="overlay" id="checkout-overlay" onclick="closeCheckout()">
-  <div class="modal-box" onclick="event.stopPropagation()" style="padding:0;max-width:520px;">
-    <!-- Checkout Header -->
-    <div style="background:linear-gradient(135deg,#1a1a1a,#5c0000);padding:20px 24px;border-radius:24px 24px 0 0;position:relative;">
-      <button onclick="closeCheckout()" style="position:absolute;top:14px;left:14px;width:32px;height:32px;background:rgba(255,255,255,.15);border:none;border-radius:50%;color:white;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;"><i class="fas fa-times"></i></button>
-      <h2 style="color:white;font-size:20px;font-weight:900;text-align:center;margin-bottom:16px;">إتمام الطلب</h2>
-      <!-- Step indicators -->
-      <div style="display:flex;align-items:center;justify-content:center;" id="step-indicator">
-        <div class="step-dot current" id="sdot1">1</div>
-        <div class="step-line todo" id="sline1"></div>
-        <div class="step-dot todo" id="sdot2">2</div>
-        <div class="step-line todo" id="sline2"></div>
-        <div class="step-dot todo" id="sdot3">3</div>
+<div class="modal-box" onclick="event.stopPropagation()" style="padding:0;max-width:500px;">
+  <div style="background:linear-gradient(135deg,#1a1a1a,#5c0000);padding:18px 22px;border-radius:24px 24px 0 0;position:relative;">
+    <button onclick="closeCheckout()" style="position:absolute;top:12px;left:12px;width:30px;height:30px;background:rgba(255,255,255,.15);border:none;border-radius:50%;color:white;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;"><i class="fas fa-times"></i></button>
+    <h2 style="color:white;font-size:18px;font-weight:900;text-align:center;margin-bottom:14px;">إتمام الطلب</h2>
+    <div style="display:flex;align-items:center;justify-content:center;">
+      <div class="step-dot current" id="sdot1">1</div><div class="step-line todo" id="sline1"></div>
+      <div class="step-dot todo" id="sdot2">2</div><div class="step-line todo" id="sline2"></div>
+      <div class="step-dot todo" id="sdot3">3</div>
+    </div>
+  </div>
+  <div style="padding:20px;">
+    <div class="checkout-step active" id="step1">
+      <h3 style="font-weight:800;margin-bottom:14px;font-size:15px;">طريقة الاستلام</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;">
+        <div class="sel-card" id="pickup-card" onclick="selectFulfillment('pickup')" style="text-align:center;padding:18px;"><div style="font-size:32px;margin-bottom:6px;">🏪</div><div style="font-weight:800;font-size:14px;">استلام</div><div style="font-size:11px;color:#6B7280;">من الفرع</div></div>
+        <div class="sel-card" id="delivery-card" onclick="selectFulfillment('delivery')" style="text-align:center;padding:18px;"><div style="font-size:32px;margin-bottom:6px;">🛵</div><div style="font-weight:800;font-size:14px;">توصيل</div><div style="font-size:11px;color:#6B7280;">لموقعك</div></div>
       </div>
-      <div style="display:flex;justify-content:space-between;margin-top:8px;padding:0 16px;">
-        <span style="font-size:11px;color:rgba(255,255,255,.6);">طريقة الاستلام</span>
-        <span style="font-size:11px;color:rgba(255,255,255,.6);">بياناتك</span>
-        <span style="font-size:11px;color:rgba(255,255,255,.6);">تأكيد</span>
+      <div id="branch-section" style="display:none;">
+        <h4 style="font-weight:700;margin-bottom:8px;font-size:13px;">اختر الفرع</h4>
+        <div style="display:flex;flex-direction:column;gap:7px;">
+          <div class="sel-card" id="branch-madina" onclick="selectBranch('madina')" style="display:flex;align-items:center;gap:10px;"><i class="fas fa-map-marker-alt" style="color:var(--red);"></i><div style="font-weight:700;font-size:13px;">شارع المدينة المنورة</div></div>
+          <div class="sel-card" id="branch-tabarbour" onclick="selectBranch('tabarbour')" style="display:flex;align-items:center;gap:10px;"><i class="fas fa-map-marker-alt" style="color:var(--red);"></i><div style="font-weight:700;font-size:13px;">طبربور</div></div>
+          <div class="sel-card" id="branch-radio" onclick="selectBranch('radio')" style="display:flex;align-items:center;gap:10px;"><i class="fas fa-map-marker-alt" style="color:var(--red);"></i><div style="font-weight:700;font-size:13px;">شارع الإذاعة</div></div>
+        </div>
+      </div>
+      <div id="area-section" style="display:none;">
+        <h4 style="font-weight:700;margin-bottom:8px;font-size:13px;">اختر منطقتك</h4>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;" id="areas-grid"></div>
+      </div>
+      <button class="btn-red" onclick="goToStep2()" style="width:100%;padding:13px;border-radius:12px;font-size:14px;margin-top:18px;">التالي →</button>
+    </div>
+    <div class="checkout-step" id="step2">
+      <h3 style="font-weight:800;margin-bottom:14px;font-size:15px;">بياناتك</h3>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div><label style="font-weight:700;font-size:12px;display:block;margin-bottom:5px;">الاسم *</label><input type="text" id="cust-name" placeholder="اسمك الكامل"></div>
+        <div><label style="font-weight:700;font-size:12px;display:block;margin-bottom:5px;">الهاتف *</label><input type="tel" id="cust-phone" placeholder="07XXXXXXXX"></div>
+        <div id="address-field" style="display:none;"><label style="font-weight:700;font-size:12px;display:block;margin-bottom:5px;">العنوان *</label><textarea id="cust-address" rows="2" placeholder="الشارع، رقم البناية..."></textarea></div>
+        <div><label style="font-weight:700;font-size:12px;display:block;margin-bottom:5px;">ملاحظات</label><textarea id="cust-notes" rows="2" placeholder="أي طلبات خاصة..."></textarea></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px;">
+        <button onclick="goToStep(1)" style="padding:12px;border-radius:10px;font-family:'Cairo',sans-serif;font-weight:700;font-size:13px;border:2px solid #E5E7EB;background:white;cursor:pointer;">← رجوع</button>
+        <button class="btn-red" onclick="goToStep3()" style="padding:12px;border-radius:10px;font-size:14px;">التالي →</button>
       </div>
     </div>
-
-    <div style="padding:24px;">
-      <!-- Step 1: Pickup or Delivery -->
-      <div class="checkout-step active" id="step1">
-        <h3 style="font-weight:800;margin-bottom:16px;font-size:16px;">طريقة الاستلام</h3>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
-          <div class="sel-card" id="pickup-card" onclick="selectFulfillment('pickup')" style="text-align:center;padding:20px;">
-            <div style="font-size:36px;margin-bottom:8px;">🏪</div>
-            <div style="font-weight:800;font-size:15px;">استلام</div>
-            <div style="font-size:12px;color:#6B7280;margin-top:4px;">من الفرع</div>
-          </div>
-          <div class="sel-card" id="delivery-card" onclick="selectFulfillment('delivery')" style="text-align:center;padding:20px;">
-            <div style="font-size:36px;margin-bottom:8px;">🛵</div>
-            <div style="font-weight:800;font-size:15px;">توصيل</div>
-            <div style="font-size:12px;color:#6B7280;margin-top:4px;">لموقعك</div>
-          </div>
-        </div>
-
-        <!-- Branch selection (pickup) -->
-        <div id="branch-section" style="display:none;">
-          <h4 style="font-weight:700;margin-bottom:10px;font-size:14px;">اختر الفرع</h4>
-          <div style="display:flex;flex-direction:column;gap:8px;">
-            <div class="sel-card" id="branch-madina" onclick="selectBranch('madina')" style="display:flex;align-items:center;gap:12px;">
-              <i class="fas fa-map-marker-alt" style="color:#CC0000;font-size:18px;width:20px;"></i>
-              <div>
-                <div style="font-weight:700;font-size:14px;">شارع المدينة المنورة</div>
-                <div style="font-size:12px;color:#6B7280;">Madina Al Monawara Street</div>
-              </div>
-            </div>
-            <div class="sel-card" id="branch-tabarbour" onclick="selectBranch('tabarbour')" style="display:flex;align-items:center;gap:12px;">
-              <i class="fas fa-map-marker-alt" style="color:#CC0000;font-size:18px;width:20px;"></i>
-              <div>
-                <div style="font-weight:700;font-size:14px;">طبربور</div>
-                <div style="font-size:12px;color:#6B7280;">Tabarbour</div>
-              </div>
-            </div>
-            <div class="sel-card" id="branch-radio" onclick="selectBranch('radio')" style="display:flex;align-items:center;gap:12px;">
-              <i class="fas fa-map-marker-alt" style="color:#CC0000;font-size:18px;width:20px;"></i>
-              <div>
-                <div style="font-weight:700;font-size:14px;">شارع الإذاعة</div>
-                <div style="font-size:12px;color:#6B7280;">Radio Street</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Area selection (delivery) -->
-        <div id="area-section" style="display:none;">
-          <h4 style="font-weight:700;margin-bottom:10px;font-size:14px;">اختر منطقتك في عمّان</h4>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;" id="areas-grid">
-          </div>
-        </div>
-
-        <button class="btn-red" onclick="goToStep2()" style="width:100%;padding:14px;border-radius:12px;font-size:15px;margin-top:20px;" id="step1-next">التالي →</button>
-      </div>
-
-      <!-- Step 2: Customer Info -->
-      <div class="checkout-step" id="step2">
-        <h3 style="font-weight:800;margin-bottom:16px;font-size:16px;">بياناتك</h3>
-        <div style="display:flex;flex-direction:column;gap:12px;">
-          <div>
-            <label style="font-weight:700;font-size:13px;display:block;margin-bottom:6px;">الاسم الكامل <span style="color:#CC0000;">*</span></label>
-            <input type="text" id="cust-name" placeholder="مثال: محمد أحمد" />
-          </div>
-          <div>
-            <label style="font-weight:700;font-size:13px;display:block;margin-bottom:6px;">رقم الهاتف <span style="color:#CC0000;">*</span></label>
-            <input type="tel" id="cust-phone" placeholder="07XXXXXXXX" />
-          </div>
-          <div id="address-field" style="display:none;">
-            <label style="font-weight:700;font-size:13px;display:block;margin-bottom:6px;">العنوان التفصيلي <span style="color:#CC0000;">*</span></label>
-            <textarea id="cust-address" rows="2" placeholder="الشارع، رقم البناية، الطابق..."></textarea>
-          </div>
-          <div>
-            <label style="font-weight:700;font-size:13px;display:block;margin-bottom:6px;">ملاحظات (اختياري)</label>
-            <textarea id="cust-notes" rows="2" placeholder="أي طلبات خاصة..."></textarea>
-          </div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px;">
-          <button class="btn-outline" onclick="goToStep(1)" style="padding:14px;border-radius:12px;font-size:14px;">← رجوع</button>
-          <button class="btn-red" onclick="goToStep3()" style="padding:14px;border-radius:12px;font-size:15px;">التالي →</button>
-        </div>
-      </div>
-
-      <!-- Step 3: Order Summary -->
-      <div class="checkout-step" id="step3">
-        <h3 style="font-weight:800;margin-bottom:16px;font-size:16px;">مراجعة الطلب</h3>
-        <div id="order-summary" style="background:#F9FAFB;border-radius:12px;padding:16px;margin-bottom:16px;"></div>
-        <div style="background:#FFF0F0;border-radius:12px;padding:14px;margin-bottom:16px;border:2px solid #FFCCCC;" id="order-info-box"></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-          <button class="btn-outline" onclick="goToStep(2)" style="padding:14px;border-radius:12px;font-size:14px;">← رجوع</button>
-          <button class="btn-red" onclick="confirmOrder()" style="padding:14px;border-radius:12px;font-size:15px;display:flex;align-items:center;justify-content:center;gap:6px;">
-            <i class="fas fa-check"></i> تأكيد الطلب
-          </button>
-        </div>
+    <div class="checkout-step" id="step3">
+      <h3 style="font-weight:800;margin-bottom:14px;font-size:15px;">مراجعة الطلب</h3>
+      <div id="order-summary" style="background:#F9FAFB;border-radius:12px;padding:14px;margin-bottom:12px;"></div>
+      <div id="order-info-box" style="background:#FFF0F0;border-radius:12px;padding:12px;margin-bottom:14px;border:2px solid #FFCCCC;"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <button onclick="goToStep(2)" style="padding:12px;border-radius:10px;font-family:'Cairo',sans-serif;font-weight:700;font-size:13px;border:2px solid #E5E7EB;background:white;cursor:pointer;">← رجوع</button>
+        <button class="btn-red" onclick="confirmOrder()" style="padding:12px;border-radius:10px;font-size:14px;display:flex;align-items:center;justify-content:center;gap:6px;"><i class="fas fa-check"></i>تأكيد الطلب</button>
       </div>
     </div>
   </div>
 </div>
+</div>
 
-<!-- ===================== SUCCESS MODAL ===================== -->
-<div class="overlay" id="success-overlay">
-  <div class="modal-box" style="padding:40px;text-align:center;max-width:400px;">
-    <div class="pop-in" style="width:80px;height:80px;background:#22C55E;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
-      <i class="fas fa-check" style="color:white;font-size:32px;"></i>
-    </div>
-    <h2 style="font-size:24px;font-weight:900;margin-bottom:8px;">تم الطلب بنجاح! 🎉</h2>
-    <p style="color:#6B7280;font-size:14px;line-height:1.7;margin-bottom:8px;">شكراً لك! تم استلام طلبك وسيتم التواصل معك قريباً.</p>
-    <p id="success-eta" style="font-weight:700;color:#CC0000;font-size:15px;margin-bottom:24px;"></p>
-    <button class="btn-red" onclick="closeSuccess()" style="padding:14px 32px;border-radius:12px;font-size:15px;">رائع، شكراً!</button>
+<!-- SUCCESS -->
+<div class="overlay" id="success-overlay" style="z-index:500;">
+  <div class="modal-box" style="padding:40px;text-align:center;max-width:380px;">
+    <div class="pop-in" style="width:72px;height:72px;background:#22C55E;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;"><i class="fas fa-check" style="color:white;font-size:28px;"></i></div>
+    <h2 style="font-size:22px;font-weight:900;margin-bottom:8px;">تم الطلب بنجاح! 🎉</h2>
+    <p style="color:#6B7280;font-size:13px;line-height:1.7;margin-bottom:8px;">شكراً! سيتم التواصل معك قريباً.</p>
+    <p id="success-eta" style="font-weight:700;color:var(--red);font-size:14px;margin-bottom:22px;"></p>
+    <button class="btn-red" onclick="closeSuccess()" style="padding:12px 30px;border-radius:12px;font-size:14px;">رائع، شكراً!</button>
   </div>
 </div>
 
-<!-- ===================== TOAST ===================== -->
-<div style="position:fixed;top:80px;left:16px;z-index:9999;" id="toast-container"></div>
-
-<!-- ===================== FLOATING CART (mobile) ===================== -->
-<button onclick="openCart()" id="float-cart-btn" style="display:none;position:fixed;bottom:24px;right:24px;z-index:199;width:60px;height:60px;background:linear-gradient(135deg,#CC0000,#FF4444);border:none;border-radius:50%;color:white;font-size:22px;cursor:pointer;box-shadow:0 8px 24px rgba(204,0,0,.5);align-items:center;justify-content:center;">
+<div style="position:fixed;top:76px;left:16px;z-index:9999;" id="toast-container"></div>
+<button onclick="openCart()" id="float-cart-btn" style="display:none;position:fixed;bottom:22px;right:22px;z-index:199;width:56px;height:56px;background:linear-gradient(135deg,var(--red),#FF4444);border:none;border-radius:50%;color:white;font-size:20px;cursor:pointer;box-shadow:0 8px 24px rgba(204,0,0,.5);align-items:center;justify-content:center;">
   <i class="fas fa-shopping-cart"></i>
-  <span id="float-count" style="position:absolute;top:-4px;right:-4px;background:#FFD700;color:#1a1a1a;border-radius:50%;width:22px;height:22px;font-size:11px;font-weight:900;display:none;align-items:center;justify-content:center;"></span>
+  <span id="float-count" style="position:absolute;top:-4px;right:-4px;background:var(--accent);color:#1a1a1a;border-radius:50%;width:20px;height:20px;font-size:10px;font-weight:900;display:none;align-items:center;justify-content:center;"></span>
 </button>
 
-<style>
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
-</style>
-
 <script>
-// ===================== DATA =====================
-const pizzaTypes = [
-  {id:'pepperoni',name:'بيبروني',en:'Pepperoni',emoji:'🍕',color:'#B91C1C'},
-  {id:'margherita',name:'مارجريتا',en:'Margherita',emoji:'🍅',color:'#16A34A'},
-  {id:'spicy-ranch',name:'سبايسي رانش',en:'Spicy Ranch',emoji:'🌶️',color:'#EA580C'},
-  {id:'ranch',name:'رانش',en:'Ranch',emoji:'🥛',color:'#0369A1'},
-  {id:'bbq-chicken',name:'دجاج باربيكيو',en:'BBQ Chicken',emoji:'🍗',color:'#92400E'},
-  {id:'bbq-ranch',name:'باربيكيو رانش',en:'BBQ Ranch',emoji:'🥩',color:'#7C2D12'},
-  {id:'veggie',name:'الخضار',en:'Veggie Pizza',emoji:'🥦',color:'#15803D'},
-  {id:'pizzasta',name:'بيتزاستا',en:'Pizzasta',emoji:'🍝',color:'#7C3AED'},
-];
+// =========================================
+// DATA
+// =========================================
+const FALLBACK={branding:{name:'برشتا بيتزا',nameEn:'Breshta Pizza',tagline:'أفضل بيتزا في عمّان!',primaryColor:'#CC0000',secondaryColor:'#1a1a1a',accentColor:'#FFD700',logoDataUrl:null},pizza:[{id:'pepperoni',name:'بيبروني',nameEn:'Pepperoni',emoji:'🍕',imageDataUrl:null,gradient:'linear-gradient(135deg,#7f1d1d,#DC2626)',toppings:['موزاريلا','صلصة الطماطم','بيبروني','أوريغانو'],price:3},{id:'margherita',name:'مارجريتا',nameEn:'Margherita',emoji:'🍅',imageDataUrl:null,gradient:'linear-gradient(135deg,#14532d,#22C55E)',toppings:['موزاريلا','صلصة الطماطم','ريحان','زيت زيتون'],price:3},{id:'spicy-ranch',name:'سبايسي رانش',nameEn:'Spicy Ranch',emoji:'🌶️',imageDataUrl:null,gradient:'linear-gradient(135deg,#431407,#EA580C)',toppings:['موزاريلا','صلصة رانش حارة','فلفل','جالابينو','دجاج'],price:3},{id:'ranch',name:'رانش',nameEn:'Ranch',emoji:'🥛',imageDataUrl:null,gradient:'linear-gradient(135deg,#0c4a6e,#0EA5E9)',toppings:['موزاريلا','صلصة رانش','دجاج','فلفل حلو'],price:3},{id:'bbq-chicken',name:'دجاج باربيكيو',nameEn:'BBQ Chicken',emoji:'🍗',imageDataUrl:null,gradient:'linear-gradient(135deg,#451a03,#D97706)',toppings:['موزاريلا','صلصة باربيكيو','دجاج مشوي','بصل'],price:3},{id:'bbq-ranch',name:'باربيكيو رانش',nameEn:'BBQ Ranch',emoji:'🥩',imageDataUrl:null,gradient:'linear-gradient(135deg,#7C2D12,#7C3AED)',toppings:['موزاريلا','صلصة باربيكيو رانش','دجاج'],price:3},{id:'veggie',name:'الخضار',nameEn:'Veggie',emoji:'🥦',imageDataUrl:null,gradient:'linear-gradient(135deg,#052e16,#16A34A)',toppings:['موزاريلا','صلصة الطماطم','فلفل','بصل','زيتون','فطر'],price:3},{id:'pizzasta',name:'بيتزاستا',nameEn:'Pizzasta',emoji:'🍝',imageDataUrl:null,gradient:'linear-gradient(135deg,#2e1065,#A855F7)',toppings:['موزاريلا','صلصة الطماطم','باستا ألفريدو','دجاج'],price:3}],appetizers:[{id:'gb',name:'خبز الثوم',nameEn:'Garlic Bread',desc:'خبز مقرمش بالثوم والزبدة',price:1.5,emoji:'🫓',imageDataUrl:null,gradient:'linear-gradient(135deg,#78350F,#D97706)'},{id:'ms',name:'أصابع موزاريلا',nameEn:'Mozzarella Sticks',desc:'6 أصابع مقرمشة',price:2.5,emoji:'🧀',imageDataUrl:null,gradient:'linear-gradient(135deg,#713F12,#F59E0B)'},{id:'cw',name:'أجنحة الدجاج',nameEn:'Chicken Wings',desc:'6 أجنحة مع صلصة اختيارك',price:3.5,emoji:'🍗',imageDataUrl:null,gradient:'linear-gradient(135deg,#451a03,#C2410C)'},{id:'pw',name:'أوتار البطاطا',nameEn:'Potato Wedges',desc:'بطاطا مقرمشة',price:2.0,emoji:'🍟',imageDataUrl:null,gradient:'linear-gradient(135deg,#713F12,#EAB308)'},{id:'lf',name:'بطاطا محملة',nameEn:'Loaded Fries',desc:'بطاطا مع جبنة وكريمي',price:3.0,emoji:'🍟',imageDataUrl:null,gradient:'linear-gradient(135deg,#7C2D12,#F97316)'},{id:'cs',name:'سلطة سيزر',nameEn:'Caesar Salad',desc:'خس روماني مع صلصة سيزر',price:2.5,emoji:'🥗',imageDataUrl:null,gradient:'linear-gradient(135deg,#14532d,#4ADE80)'}],drinks:[{id:'pepsi',name:'بيبسي',nameEn:'Pepsi',desc:'علبة 330 مل',price:0.75,emoji:'🥤',imageDataUrl:null,gradient:'linear-gradient(135deg,#1e1b4b,#4338CA)'},{id:'7up',name:'سفن أب',nameEn:'7UP',desc:'علبة 330 مل',price:0.75,emoji:'🥤',imageDataUrl:null,gradient:'linear-gradient(135deg,#14532d,#22C55E)'},{id:'mir',name:'ميرندا',nameEn:'Miranda',desc:'علبة 330 مل',price:0.75,emoji:'🥤',imageDataUrl:null,gradient:'linear-gradient(135deg,#431407,#F97316)'},{id:'wat',name:'مياه معدنية',nameEn:'Mineral Water',desc:'زجاجة 500 مل',price:0.5,emoji:'💧',imageDataUrl:null,gradient:'linear-gradient(135deg,#0c4a6e,#38BDF8)'},{id:'fj',name:'عصير طازج',nameEn:'Fresh Juice',desc:'برتقال أو تفاح',price:2.0,emoji:'🍊',imageDataUrl:null,gradient:'linear-gradient(135deg,#7c2d12,#FB923C)'},{id:'mk',name:'ميلك شيك',nameEn:'Milkshake',desc:'شوكولاتة أو فانيلا',price:3.0,emoji:'🥤',imageDataUrl:null,gradient:'linear-gradient(135deg,#3b0764,#C084FC)'}],desserts:[{id:'cc',name:'كيك الشوكولاتة',nameEn:'Chocolate Cake',desc:'كيك لازق بالكراميل',price:2.5,emoji:'🎂',imageDataUrl:null,gradient:'linear-gradient(135deg,#1c0a00,#78350F)'},{id:'ck',name:'كوكيز',nameEn:'Cookies',desc:'4 قطع بالشوكولاتة',price:1.5,emoji:'🍪',imageDataUrl:null,gradient:'linear-gradient(135deg,#451a03,#D97706)'},{id:'np',name:'بيتزا نوتيلا',nameEn:'Nutella Pizza',desc:'عجينة مع نوتيلا وفراولة',price:4.0,emoji:'🍫',imageDataUrl:null,gradient:'linear-gradient(135deg,#27130e,#B45309)'},{id:'ic',name:'آيس كريم',nameEn:'Ice Cream',desc:'2 كرة باختيارك',price:1.5,emoji:'🍦',imageDataUrl:null,gradient:'linear-gradient(135deg,#4a044e,#E879F9)'},{id:'chk',name:'تشيز كيك',nameEn:'Cheesecake',desc:'كلاسيكي بالتوت',price:3.0,emoji:'🍰',imageDataUrl:null,gradient:'linear-gradient(135deg,#831843,#F472B6)'}],offers:[{id:'fam',name:'عرض العائلة',nameEn:'Family Deal',desc:'بيتزا كبيرة + 2 مقبلات + 4 مشروبات',price:18,emoji:'👨‍👩‍👧‍👦',badge:'الأكثر طلباً',imageDataUrl:null,gradient:'linear-gradient(135deg,#7f1d1d,#B91C1C)'},{id:'std',name:'عرض الطالب',nameEn:'Student Deal',desc:'بيتزا صغيرة + مشروب',price:5.5,emoji:'🎓',badge:'قيمة',imageDataUrl:null,gradient:'linear-gradient(135deg,#1e1b4b,#4338CA)'},{id:'cpd',name:'عرض الزوجين',nameEn:'Couple Deal',desc:'بيتزاتان وسط + مقبل + مشروبان',price:13,emoji:'💑',badge:'رومانسي',imageDataUrl:null,gradient:'linear-gradient(135deg,#831843,#EC4899)'},{id:'par',name:'عرض الحفلة',nameEn:'Party Deal',desc:'3 بيتزا كبيرة + 6 مقبلات + 6 مشروبات',price:35,emoji:'🎉',badge:'للمجموعات',imageDataUrl:null,gradient:'linear-gradient(135deg,#064e3b,#059669)'}],extraToppings:[{id:'et1',name:'جبنة موزاريلا إضافية',price:0.75},{id:'et2',name:'هالابينو',price:0.5},{id:'et3',name:'فطر',price:0.5},{id:'et4',name:'زيتون',price:0.5},{id:'et5',name:'بيبروني إضافي',price:1.0},{id:'et6',name:'دجاج إضافي',price:1.25},{id:'et7',name:'بصل كرمل',price:0.25},{id:'et8',name:'فلفل حلو',price:0.25}]};
+let D={};
 
-const sizes = [
-  {id:'small',name:'صغير',price:3},
-  {id:'medium',name:'وسط',price:5},
-  {id:'large',name:'كبير',price:7},
-];
+function loadD(){const s=localStorage.getItem('breshta_data');try{return s?JSON.parse(s):null;}catch(e){return null;}}
 
-const crustsBySize = {
-  small: [
-    {id:'pan',name:'بان / سميكة',extra:0},
-    {id:'thin',name:'رفيعة',extra:0},
-  ],
-  medium: [
-    {id:'pan',name:'بان',extra:0},
-    {id:'medium-crust',name:'وسط',extra:0},
-    {id:'thin',name:'رفيعة',extra:0},
-    {id:'stuffed',name:'محشية الأطراف',extra:1.25},
-    {id:'cheese-fingers',name:'أصابع جبنة',extra:0},
-    {id:'crown',name:'كروان',extra:0},
-  ],
-  large: [
-    {id:'pan',name:'بان',extra:0},
-    {id:'medium-crust',name:'وسط',extra:0},
-    {id:'thin',name:'رفيعة',extra:0},
-    {id:'stuffed',name:'محشية الأطراف',extra:1.50},
-    {id:'cheese-fingers',name:'أصابع جبنة',extra:0},
-    {id:'crown',name:'كروان',extra:0},
-  ],
-};
-
-const cardGradients = {
-  pepperoni: 'linear-gradient(135deg,#7f1d1d,#DC2626)',
-  margherita: 'linear-gradient(135deg,#14532d,#22C55E)',
-  'spicy-ranch': 'linear-gradient(135deg,#431407,#EA580C)',
-  ranch: 'linear-gradient(135deg,#0c4a6e,#0EA5E9)',
-  'bbq-chicken': 'linear-gradient(135deg,#451a03,#D97706)',
-  'bbq-ranch': 'linear-gradient(135deg,#3b0764,#7C3AED)',
-  veggie: 'linear-gradient(135deg,#052e16,#16A34A)',
-  pizzasta: 'linear-gradient(135deg,#2e1065,#A855F7)',
-};
-
-const dippingSauces = [
-  {id:'pesto',name:'بيستو 🌿'},
-  {id:'bbq',name:'باربيكيو 🔥'},
-  {id:'ranch',name:'رانش 🥛'},
-  {id:'ketchup',name:'كيتشاب 🍅'},
-  {id:'garlic',name:'ثوم 🧄'},
-  {id:'hot',name:'نار 🌶️'},
-];
-
-const appetizersData = [
-  {id:'garlic-bread',name:'خبز الثوم',en:'Garlic Bread',price:1.5,desc:'خبز مقرمش بالثوم والزبدة',emoji:'🫓',bg:'linear-gradient(135deg,#78350F,#D97706)'},
-  {id:'mozzarella-sticks',name:'أصابع موزاريلا',en:'Mozzarella Sticks',price:2.5,desc:'6 أصابع مقرمشة مع صلصة تغميس',emoji:'🧀',bg:'linear-gradient(135deg,#713F12,#F59E0B)'},
-  {id:'chicken-wings',name:'أجنحة الدجاج',en:'Chicken Wings',price:3.5,desc:'6 أجنحة مع صلصة اختيارك',emoji:'🍗',bg:'linear-gradient(135deg,#451a03,#C2410C)'},
-  {id:'potato-wedges',name:'أوتار البطاطا',en:'Potato Wedges',price:2.0,desc:'بطاطا مقرمشة مع توابل خاصة',emoji:'🍟',bg:'linear-gradient(135deg,#713F12,#EAB308)'},
-  {id:'loaded-fries',name:'بطاطا محملة',en:'Loaded Fries',price:3.0,desc:'بطاطا مع جبنة وصلصة كريمي',emoji:'🍟',bg:'linear-gradient(135deg,#7C2D12,#F97316)'},
-  {id:'caesar-salad',name:'سلطة سيزر',en:'Caesar Salad',price:2.5,desc:'خس روماني مع صلصة سيزر والكروتون',emoji:'🥗',bg:'linear-gradient(135deg,#14532d,#4ADE80)'},
-  {id:'onion-rings',name:'حلقات البصل',en:'Onion Rings',price:2.0,desc:'حلقات بصل مقرمشة ذهبية',emoji:'🧅',bg:'linear-gradient(135deg,#78350F,#FCD34D)'},
-  {id:'coleslaw',name:'كول سلو',en:'Coleslaw',price:1.5,desc:'سلطة الملفوف الكريمي الطازج',emoji:'🥗',bg:'linear-gradient(135deg,#166534,#86EFAC)'},
-];
-
-const drinksData = [
-  {id:'pepsi',name:'بيبسي',en:'Pepsi',price:0.75,desc:'علبة 330 مل',emoji:'🥤',bg:'linear-gradient(135deg,#1e1b4b,#4338CA)'},
-  {id:'7up',name:'سفن أب',en:'7UP',price:0.75,desc:'علبة 330 مل',emoji:'🥤',bg:'linear-gradient(135deg,#14532d,#22C55E)'},
-  {id:'miranda',name:'ميرندا',en:'Miranda',price:0.75,desc:'علبة 330 مل',emoji:'🥤',bg:'linear-gradient(135deg,#431407,#F97316)'},
-  {id:'water',name:'مياه معدنية',en:'Mineral Water',price:0.5,desc:'زجاجة 500 مل',emoji:'💧',bg:'linear-gradient(135deg,#0c4a6e,#38BDF8)'},
-  {id:'fresh-juice',name:'عصير طازج',en:'Fresh Juice',price:2.0,desc:'برتقال، تفاح، أو جزر',emoji:'🍊',bg:'linear-gradient(135deg,#7c2d12,#FB923C)'},
-  {id:'milkshake',name:'ميلك شيك',en:'Milkshake',price:3.0,desc:'شوكولاتة، فراولة، أو فانيلا',emoji:'🥤',bg:'linear-gradient(135deg,#3b0764,#C084FC)'},
-  {id:'lemon-mint',name:'ليمون مينت',en:'Lemon Mint',price:2.0,desc:'عصير الليمون مع النعناع',emoji:'🍋',bg:'linear-gradient(135deg,#365314,#84CC16)'},
-  {id:'pepsi-large',name:'بيبسي لارج',en:'Pepsi Large',price:1.5,desc:'زجاجة 1.5 لتر',emoji:'🥤',bg:'linear-gradient(135deg,#172554,#2563EB)'},
-];
-
-const dessertsData = [
-  {id:'chocolate-cake',name:'كيك الشوكولاتة',en:'Chocolate Cake',price:2.5,desc:'كيك لازق بصوص الكراميل',emoji:'🎂',bg:'linear-gradient(135deg,#1c0a00,#78350F)'},
-  {id:'cookies',name:'كوكيز',en:'Cookies',price:1.5,desc:'4 قطع كوكيز بالشوكولاتة الساخنة',emoji:'🍪',bg:'linear-gradient(135deg,#451a03,#D97706)'},
-  {id:'nutella-pizza',name:'بيتزا نوتيلا',en:'Nutella Pizza',price:4.0,desc:'عجينة بيتزا مع نوتيلا وفراولة',emoji:'🍫',bg:'linear-gradient(135deg,#27130e,#B45309)'},
-  {id:'ice-cream',name:'آيس كريم',en:'Ice Cream',price:1.5,desc:'2 كرة آيس كريم باختيارك',emoji:'🍦',bg:'linear-gradient(135deg,#4a044e,#E879F9)'},
-  {id:'cheesecake',name:'تشيز كيك',en:'Cheesecake',price:3.0,desc:'تشيز كيك كلاسيكي بالتوت',emoji:'🍰',bg:'linear-gradient(135deg,#831843,#F472B6)'},
-  {id:'brownie',name:'براوني',en:'Brownie',price:2.5,desc:'براوني دافئ مع آيس كريم فانيلا',emoji:'🍫',bg:'linear-gradient(135deg,#1c0a00,#92400E)'},
-];
-
-const offersData = [
-  {id:'family-deal',name:'عرض العائلة',en:'Family Deal',price:18,desc:'بيتزا كبيرة من اختيارك + 2 مقبلات + 4 مشروبات',emoji:'👨‍👩‍👧‍👦',badge:'الأكثر طلباً',badgeColor:'#DC2626',bg:'linear-gradient(135deg,#7f1d1d,#B91C1C)'},
-  {id:'student-deal',name:'عرض الطالب',en:'Student Deal',price:5.5,desc:'بيتزا صغيرة شخصية + مشروب',emoji:'🎓',badge:'قيمة',badgeColor:'#2563EB',bg:'linear-gradient(135deg,#1e1b4b,#4338CA)'},
-  {id:'couple-deal',name:'عرض الزوجين',en:'Couple Deal',price:13,desc:'بيتزاتان وسط + مقبل مشترك + مشروبان',emoji:'💑',badge:'رومانسي',badgeColor:'#DB2777',bg:'linear-gradient(135deg,#831843,#EC4899)'},
-  {id:'party-deal',name:'عرض الحفلة',en:'Party Deal',price:35,desc:'3 بيتزا كبيرة + 6 مقبلات + 6 مشروبات',emoji:'🎉',badge:'للمجموعات',badgeColor:'#059669',bg:'linear-gradient(135deg,#064e3b,#059669)'},
-];
-
-const ammanAreas = [
-  'عبدون','الصويفية','شارع مكة','خلدا','شميساني','وسط البلد',
-  'الرابية','الجبيهة','أبو نصير','ماركا','طارق','أم أذينة',
-  'ضاحية الأمير راشد','الجاردنز','المقابلين',
-];
-
-// ===================== STATE =====================
-let cart = [];
-let pizzaSel = {type:null,size:null,crust:null,qty:1,outerType:null};
-let metroSel = {types:[],sauces:[],crust:'pan',isSuper:false};
-let checkoutData = {fulfillment:null,branch:null,area:null,step:1};
-let currentMetroBase = 13;
-
-// ===================== RENDER MENUS =====================
-function renderPizzas(){
-  const g = document.getElementById('pizza-grid');
-  g.innerHTML = pizzaTypes.map(p=>`
-    <div class="menu-card" onclick="openPizzaModal('${p.id}')">
-      <div class="card-img" style="background:${cardGradients[p.id]||'#CC0000'};">
-        <div style="font-size:72px;filter:drop-shadow(0 4px 12px rgba(0,0,0,.3));">${p.emoji}</div>
-      </div>
-      <div style="padding:14px;">
-        <h3 style="font-weight:800;font-size:15px;margin-bottom:4px;">${p.name}</h3>
-        <p style="font-size:12px;color:#9CA3AF;margin-bottom:10px;">${p.en}</p>
-        <div style="display:flex;align-items:center;justify-content:space-between;">
-          <div style="font-size:13px;color:#6B7280;">من <span style="font-weight:900;color:#CC0000;font-size:16px;">3</span> د.أ</div>
-          <button class="btn-red" style="padding:7px 14px;border-radius:8px;font-size:12px;" onclick="event.stopPropagation();openPizzaModal('${p.id}')">خصص</button>
-        </div>
-      </div>
-    </div>
-  `).join('');
+function applyBranding(b){
+  if(!b)return;
+  document.documentElement.style.setProperty('--red',b.primaryColor||'#CC0000');
+  document.documentElement.style.setProperty('--secondary',b.secondaryColor||'#1a1a1a');
+  document.documentElement.style.setProperty('--accent',b.accentColor||'#FFD700');
+  if(b.name){document.getElementById('site-name').textContent=b.name;document.getElementById('footer-name').textContent=b.name;document.title=b.name+(b.nameEn?' | '+b.nameEn:'');}
+  if(b.nameEn)document.getElementById('site-name-en').textContent=b.nameEn;
+  if(b.tagline)document.getElementById('hero-tagline').textContent=b.tagline;
+  const lw=document.getElementById('logo-wrap'),fl=document.getElementById('footer-logo');
+  if(b.logoDataUrl){
+    lw.innerHTML=`<img src="${b.logoDataUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+    fl.innerHTML=`<img src="${b.logoDataUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+  }
 }
 
-function renderGrid(containerId, items, isOffer=false, isDrink=false){
-  const g = document.getElementById(containerId);
-  g.innerHTML = items.map(item=>`
-    <div class="menu-card" style="${isOffer?'position:relative;':''}" onclick="quickAddToCart(${JSON.stringify(item).replace(/"/g,'&quot;')})">
-      <div class="card-img" style="background:${item.bg||'#CC0000'};${isDrink?'height:130px;':''}">
-        ${isOffer&&item.badge?`<div style="position:absolute;top:10px;right:10px;background:${item.badgeColor};color:white;font-size:10px;font-weight:800;padding:3px 10px;border-radius:50px;">${item.badge}</div>`:''}
-        <div style="font-size:${isDrink?'52px':'68px'};filter:drop-shadow(0 4px 12px rgba(0,0,0,.3));">${item.emoji}</div>
-      </div>
-      <div style="padding:12px;">
-        <h3 style="font-weight:800;font-size:14px;margin-bottom:3px;">${item.name}</h3>
-        ${item.desc?`<p style="font-size:11px;color:#9CA3AF;margin-bottom:8px;line-height:1.4;">${item.desc}</p>`:''}
-        <div style="display:flex;align-items:center;justify-content:space-between;">
-          <span style="font-weight:900;color:#CC0000;font-size:${isDrink?'15px':'16px'};">${item.price.toFixed(2)} د.أ</span>
-          <button class="btn-red" style="padding:7px 14px;border-radius:8px;font-size:12px;" onclick="event.stopPropagation();quickAddToCart(${JSON.stringify(item).replace(/"/g,'&quot;')})">
-            <i class="fas fa-plus"></i>
-          </button>
-        </div>
+function renderCard(item,cat){
+  const isPizza=cat==='pizza';
+  const isDrink=cat==='drinks';
+  const clickFn=isPizza?`openPizzaModal('${item.id}')`:`quickAdd(${JSON.stringify(item).replace(/"/g,'&quot;')})`;
+  return `<div class="menu-card" onclick="${clickFn}">
+    <div class="card-img" style="background:${item.gradient||'#CC0000'};${isDrink?'height:130px;':''}">
+      ${item.imageDataUrl?`<img src="${item.imageDataUrl}" alt="${item.name}">`:`<span style="font-size:${isDrink?'52px':'66px'};filter:drop-shadow(0 3px 10px rgba(0,0,0,.3));">${item.emoji||'🍕'}</span>`}
+      ${item.badge?`<span style="position:absolute;top:8px;right:8px;background:#F59E0B;color:white;font-size:10px;font-weight:800;padding:2px 8px;border-radius:50px;">${item.badge}</span>`:''}
+    </div>
+    <div style="padding:12px;">
+      <div style="font-weight:800;font-size:14px;margin-bottom:2px;">${item.name}</div>
+      ${item.nameEn?`<div style="font-size:11px;color:#9CA3AF;margin-bottom:3px;">${item.nameEn}</div>`:''}
+      ${item.desc?`<div style="font-size:11px;color:#6B7280;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${item.desc}</div>`:''}
+      ${isPizza&&item.toppings&&item.toppings.length?`<div style="font-size:10px;color:#9CA3AF;margin-bottom:6px;"><i class="fas fa-list" style="color:var(--red);margin-left:3px;"></i>${item.toppings.slice(0,3).join('، ')}${item.toppings.length>3?'...':''}</div>`:''}
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-weight:900;color:var(--red);font-size:${isDrink?'14px':'16px'};">${isPizza?'من ':''}<span style="font-size:${isDrink?'14px':'18px'};">${Number(item.price).toFixed(2)}</span> د.أ</span>
+        <button class="btn-red" style="padding:7px 14px;border-radius:8px;font-size:12px;" onclick="event.stopPropagation();${clickFn}">${isPizza?'خصص':'<i class="fas fa-plus"></i>'}</button>
       </div>
     </div>
-  `).join('');
+  </div>`;
 }
 
-function renderAreas(){
-  const g = document.getElementById('areas-grid');
-  g.innerHTML = ammanAreas.map(a=>`
-    <div class="sel-card" onclick="selectArea('${a}')" id="area-${a}" style="text-align:center;padding:10px 8px;font-size:13px;font-weight:700;">
-      <i class="fas fa-location-dot" style="color:#CC0000;margin-left:4px;"></i>${a}
-    </div>
-  `).join('');
+function renderAll(){
+  ['pizza','appetizers','drinks','desserts','offers'].forEach(cat=>{
+    const g=document.getElementById(cat+'-grid');if(!g)return;
+    const items=D[cat]||[];
+    g.innerHTML=items.length?items.map(i=>renderCard(i,cat)).join(''):`<div style="color:#9CA3AF;font-size:13px;grid-column:1/-1;text-align:center;padding:30px;">لا يوجد عناصر بعد</div>`;
+  });
 }
 
-// ===================== TAB SWITCHING =====================
-function switchTab(tab){
+function switchTab(t){
   document.querySelectorAll('.tab-item').forEach(el=>el.classList.remove('active'));
   document.querySelectorAll('.sec').forEach(el=>el.classList.remove('active'));
-  document.getElementById('tab-'+tab).classList.add('active');
-  document.getElementById('sec-'+tab).classList.add('active');
-  document.getElementById('tab-bar').scrollIntoView({behavior:'smooth',block:'nearest'});
+  document.getElementById('tab-'+t).classList.add('active');
+  document.getElementById('sec-'+t).classList.add('active');
 }
 
-// ===================== PIZZA MODAL =====================
-function openPizzaModal(typeId){
-  pizzaSel = {type:typeId,size:null,crust:null,qty:1,outerType:null};
-  const p = pizzaTypes.find(x=>x.id===typeId);
-  document.getElementById('pizza-modal-title').textContent = p.name;
-  document.getElementById('pizza-modal-sub').textContent = p.en;
+// Pizza logic
+const SIZES=[{id:'small',price:3},{id:'medium',price:5},{id:'large',price:7}];
+const CRUSTS={small:[{id:'pan',name:'بان / سميكة',extra:0},{id:'thin',name:'رفيعة',extra:0}],medium:[{id:'pan',name:'بان',extra:0},{id:'med',name:'وسط',extra:0},{id:'thin',name:'رفيعة',extra:0},{id:'stuffed',name:'محشية الأطراف',extra:1.25},{id:'cheese-f',name:'أصابع جبنة',extra:0},{id:'crown',name:'كروان',extra:0}],large:[{id:'pan',name:'بان',extra:0},{id:'med',name:'وسط',extra:0},{id:'thin',name:'رفيعة',extra:0},{id:'stuffed',name:'محشية الأطراف',extra:1.50},{id:'cheese-f',name:'أصابع جبنة',extra:0},{id:'crown',name:'كروان',extra:0}]};
+const SAUCES=[{id:'pesto',name:'بيستو 🌿'},{id:'bbq',name:'باربيكيو 🔥'},{id:'ranch',name:'رانش 🥛'},{id:'ketchup',name:'كيتشاب 🍅'},{id:'garlic',name:'ثوم 🧄'},{id:'hot',name:'نار 🌶️'}];
 
-  // Render type grid
-  const tg = document.getElementById('pizza-types-grid');
-  tg.innerHTML = pizzaTypes.map(pt=>`
-    <div class="ptype-card ${pt.id===typeId?'sel':''}" onclick="selectPizzaType('${pt.id}')" id="ptype-${pt.id}">
-      <div style="font-size:28px;">${pt.emoji}</div>
-      <div style="font-size:10px;font-weight:700;margin-top:4px;line-height:1.2;">${pt.name}</div>
-    </div>
-  `).join('');
+let PS={type:null,size:null,crust:null,qty:1,outerType:null,removed:[],extras:[]};
+let CPI=null;
 
-  // Render pizzasta outer grid
-  renderPizzastaOuter();
-
-  document.getElementById('pizzasta-extra').style.display = typeId==='pizzasta' ? 'block' : 'none';
-
-  // Reset crusts
-  document.getElementById('crusts-grid').innerHTML = '<div style="color:#9CA3AF;font-size:13px;grid-column:1/-1;text-align:center;padding:10px;">اختر الحجم أولاً</div>';
-
-  // Reset sizes
+function openPizzaModal(tid){
+  CPI=(D.pizza||[]).find(p=>p.id===tid);if(!CPI)return;
+  PS={type:tid,size:null,crust:null,qty:1,outerType:null,removed:[],extras:[]};
+  document.getElementById('pizza-modal-emoji').textContent=CPI.emoji||'🍕';
+  document.getElementById('pizza-modal-title').textContent=CPI.name;
+  const tg=document.getElementById('pizza-types-grid');
+  tg.innerHTML=(D.pizza||[]).map(p=>`<div class="ptype-card ${p.id===tid?'sel':''}" onclick="selPType('${p.id}')" id="ptype-${p.id}">
+    ${p.imageDataUrl?`<img src="${p.imageDataUrl}" style="width:44px;height:44px;border-radius:8px;object-fit:cover;margin:0 auto 3px;display:block;">`:`<div style="font-size:24px;margin-bottom:2px;">${p.emoji||'🍕'}</div>`}
+    <div style="font-weight:700;font-size:10px;line-height:1.2;">${p.name}</div></div>`).join('');
+  renderOuterGrid();
+  document.getElementById('pizzasta-extra').style.display=tid==='pizzasta'?'block':'none';
+  document.getElementById('crusts-grid').innerHTML='<div style="color:#9CA3AF;font-size:12px;grid-column:1/-1;text-align:center;padding:8px;">اختر الحجم أولاً</div>';
   ['small','medium','large'].forEach(s=>document.getElementById('size-'+s).classList.remove('sel'));
-
-  updatePizzaPrice();
-  document.getElementById('pizza-overlay').classList.add('show');
-  document.body.style.overflow='hidden';
+  renderDefToppings();renderExtToppings();updatePP();
+  document.getElementById('pizza-overlay').classList.add('show');document.body.style.overflow='hidden';
 }
-
-function renderPizzastaOuter(){
-  const og = document.getElementById('pizzasta-outer-grid');
-  const nonPizzasta = pizzaTypes.filter(p=>p.id!=='pizzasta');
-  og.innerHTML = nonPizzasta.map(pt=>`
-    <div class="ptype-card ${pizzaSel.outerType===pt.id?'sel':''}" onclick="selectOuterType('${pt.id}')" id="outer-${pt.id}">
-      <div style="font-size:24px;">${pt.emoji}</div>
-      <div style="font-size:10px;font-weight:700;margin-top:4px;line-height:1.2;">${pt.name}</div>
-    </div>
-  `).join('');
+function renderOuterGrid(){
+  const og=document.getElementById('pizzasta-outer-grid');
+  og.innerHTML=(D.pizza||[]).filter(p=>p.id!=='pizzasta').map(p=>`<div class="ptype-card ${PS.outerType===p.id?'sel':''}" onclick="selOuter('${p.id}')" id="outer-${p.id}">
+    <div style="font-size:22px;margin-bottom:2px;">${p.emoji||'🍕'}</div>
+    <div style="font-weight:700;font-size:10px;line-height:1.2;">${p.name}</div></div>`).join('');
 }
-
-function selectPizzaType(id){
-  pizzaSel.type = id;
+function renderDefToppings(){
+  const tp=CPI?.toppings||[];
+  const el=document.getElementById('default-toppings-list');
+  el.innerHTML=tp.length?tp.map(t=>`<div class="topping-check-item" onclick="togRem('${t.replace(/'/g,"\\'")}')">
+    <input type="checkbox" ${PS.removed.includes(t)?'':'checked'} onclick="event.stopPropagation();togRem('${t.replace(/'/g,"\\'")}')">
+    <span style="font-size:13px;font-weight:600;${PS.removed.includes(t)?'text-decoration:line-through;color:#9CA3AF;':''}">${t}</span>
+    ${PS.removed.includes(t)?'<span style="font-size:10px;color:#9CA3AF;margin-right:auto;">محذوف</span>':''}
+  </div>`).join(''):'<div style="font-size:12px;color:#9CA3AF;padding:6px;">لا تتوفر معلومات المكونات</div>';
+}
+function renderExtToppings(){
+  const es=D.extraToppings||[];
+  const sec=document.getElementById('extra-toppings-section');
+  const list=document.getElementById('extra-toppings-list');
+  if(!es.length){sec.style.display='none';return;}
+  sec.style.display='block';
+  list.innerHTML=es.map(e=>`<div class="extra-topping-item ${PS.extras.includes(e.id)?'selected':''}" onclick="togExt('${e.id}')">
+    <input type="checkbox" ${PS.extras.includes(e.id)?'checked':''} onclick="event.stopPropagation();">
+    <span style="font-size:13px;font-weight:600;flex:1;">${e.name}</span>
+    <span style="font-weight:900;color:var(--red);font-size:13px;">+${Number(e.price).toFixed(2)} د.أ</span>
+  </div>`).join('');
+}
+function togRem(t){const i=PS.removed.indexOf(t);i>-1?PS.removed.splice(i,1):PS.removed.push(t);renderDefToppings();}
+function togExt(id){const i=PS.extras.indexOf(id);i>-1?PS.extras.splice(i,1):PS.extras.push(id);renderExtToppings();updatePP();}
+function selPType(id){
+  PS.type=id;PS.removed=[];PS.extras=[];
+  CPI=(D.pizza||[]).find(p=>p.id===id);
+  document.getElementById('pizza-modal-title').textContent=CPI?.name||'';
+  document.getElementById('pizza-modal-emoji').textContent=CPI?.emoji||'🍕';
   document.querySelectorAll('#pizza-types-grid .ptype-card').forEach(el=>el.classList.remove('sel'));
-  document.getElementById('ptype-'+id).classList.add('sel');
-  document.getElementById('pizzasta-extra').style.display = id==='pizzasta' ? 'block' : 'none';
-  if(id!=='pizzasta') pizzaSel.outerType=null;
-  updatePizzaPrice();
+  document.getElementById('ptype-'+id)?.classList.add('sel');
+  document.getElementById('pizzasta-extra').style.display=id==='pizzasta'?'block':'none';
+  if(id!=='pizzasta')PS.outerType=null;
+  renderDefToppings();renderExtToppings();updatePP();
 }
-
-function selectOuterType(id){
-  pizzaSel.outerType = id;
+function selOuter(id){
+  PS.outerType=id;
   document.querySelectorAll('#pizzasta-outer-grid .ptype-card').forEach(el=>el.classList.remove('sel'));
-  document.getElementById('outer-'+id).classList.add('sel');
+  document.getElementById('outer-'+id)?.classList.add('sel');
 }
-
 function selectSize(s){
-  pizzaSel.size = s;
-  pizzaSel.crust = null;
+  PS.size=s;PS.crust=null;
   ['small','medium','large'].forEach(x=>document.getElementById('size-'+x).classList.remove('sel'));
   document.getElementById('size-'+s).classList.add('sel');
-  renderCrusts(s);
-  updatePizzaPrice();
+  document.getElementById('crusts-grid').innerHTML=CRUSTS[s].map(c=>`<div class="crust-btn" onclick="selCrust('${c.id}')" id="crust-${c.id}">
+    <div style="font-weight:700;font-size:12px;">${c.name}</div>
+    ${c.extra>0?`<div style="font-size:10px;color:var(--red);margin-top:2px;">+${c.extra.toFixed(2)} د.أ</div>`:''}</div>`).join('');
+  updatePP();
 }
-
-function renderCrusts(s){
-  const cg = document.getElementById('crusts-grid');
-  const crusts = crustsBySize[s];
-  cg.innerHTML = crusts.map(c=>`
-    <div class="crust-btn" onclick="selectCrust('${c.id}',${c.extra})" id="crust-${c.id}">
-      <div style="font-weight:700;">${c.name}</div>
-      ${c.extra>0?`<div style="font-size:10px;color:#CC0000;margin-top:2px;">+${c.extra.toFixed(2)} د.أ</div>`:''}
-    </div>
-  `).join('');
-}
-
-function selectCrust(id){
-  pizzaSel.crust = id;
+function selCrust(id){
+  PS.crust=id;
   document.querySelectorAll('#crusts-grid .crust-btn').forEach(el=>el.classList.remove('sel'));
-  const el = document.getElementById('crust-'+id);
-  if(el) el.classList.add('sel');
-  updatePizzaPrice();
+  document.getElementById('crust-'+id)?.classList.add('sel');updatePP();
 }
-
-function changeQty(d){
-  pizzaSel.qty = Math.max(1, pizzaSel.qty + d);
-  document.getElementById('pizza-qty').textContent = pizzaSel.qty;
-  updatePizzaPrice();
+function changeQty(d){PS.qty=Math.max(1,PS.qty+d);document.getElementById('pizza-qty').textContent=PS.qty;updatePP();}
+function updatePP(){
+  if(!PS.size){document.getElementById('pizza-price').textContent='— د.أ';return;}
+  const bp=SIZES.find(s=>s.id===PS.size).price;
+  let ce=0;if(PS.crust&&PS.size!=='small'){const c=CRUSTS[PS.size].find(x=>x.id===PS.crust);if(c)ce=c.extra;}
+  const et=PS.extras.reduce((s,eid)=>{const e=(D.extraToppings||[]).find(x=>x.id===eid);return s+(e?Number(e.price):0);},0);
+  document.getElementById('pizza-price').textContent=((bp+ce+et)*PS.qty).toFixed(2)+' د.أ';
 }
-
-function updatePizzaPrice(){
-  if(!pizzaSel.size){
-    document.getElementById('pizza-price').textContent = '— د.أ';
-    return;
-  }
-  const baseP = sizes.find(s=>s.id===pizzaSel.size).price;
-  let crustExtra = 0;
-  if(pizzaSel.crust && pizzaSel.size!=='small'){
-    const c = crustsBySize[pizzaSel.size].find(x=>x.id===pizzaSel.crust);
-    if(c) crustExtra = c.extra;
-  }
-  const total = (baseP + crustExtra) * pizzaSel.qty;
-  document.getElementById('pizza-price').textContent = total.toFixed(2)+' د.أ';
-}
-
 function addPizzaToCart(){
-  if(!pizzaSel.type){ showToast('اختر نوع البيتزا','⚠️'); return; }
-  if(!pizzaSel.size){ showToast('اختر الحجم','⚠️'); return; }
-  if(!pizzaSel.crust){ showToast('اختر نوع العجينة','⚠️'); return; }
-  if(pizzaSel.type==='pizzasta' && !pizzaSel.outerType){ showToast('اختر نوع الحافة الخارجية للبيتزاستا','⚠️'); return; }
-
-  const pt = pizzaTypes.find(x=>x.id===pizzaSel.type);
-  const sz = sizes.find(x=>x.id===pizzaSel.size);
-  const crusts = crustsBySize[pizzaSel.size];
-  const cr = crusts.find(x=>x.id===pizzaSel.crust);
-  const baseP = sz.price + (cr?cr.extra:0);
-
-  let name = pt.name;
-  if(pizzaSel.type==='pizzasta' && pizzaSel.outerType){
-    const ot = pizzaTypes.find(x=>x.id===pizzaSel.outerType);
-    name += ` (${ot.name})`;
-  }
-
-  cart.push({
-    id: Date.now(),
-    name,
-    details: `${sz.name} - ${cr?cr.name:''}`,
-    price: baseP,
-    qty: pizzaSel.qty,
-    emoji: pt.emoji,
-  });
-  updateCartUI();
-  closePizzaModal();
-  showToast(`${name} أضيفت للسلة 🎉`,'✅');
+  if(!PS.type){showToast('اختر نوع البيتزا','⚠️');return;}
+  if(!PS.size){showToast('اختر الحجم','⚠️');return;}
+  if(!PS.crust){showToast('اختر العجينة','⚠️');return;}
+  if(PS.type==='pizzasta'&&!PS.outerType){showToast('اختر نوع الحافة','⚠️');return;}
+  const pt=(D.pizza||[]).find(p=>p.id===PS.type);
+  const sz=SIZES.find(s=>s.id===PS.size);
+  const cr=CRUSTS[PS.size].find(c=>c.id===PS.crust);
+  const bp=sz.price+(cr?cr.extra:0);
+  const ep=PS.extras.reduce((s,eid)=>{const e=(D.extraToppings||[]).find(x=>x.id===eid);return s+(e?Number(e.price):0);},0);
+  let name=pt.name;
+  if(PS.type==='pizzasta'&&PS.outerType){const ot=(D.pizza||[]).find(p=>p.id===PS.outerType);name+=` (${ot?.name||''})`;}
+  let dp=[sz.id==='small'?'صغير':sz.id==='medium'?'وسط':'كبير',cr?.name||''];
+  if(PS.removed.length)dp.push('بدون: '+PS.removed.join('، '));
+  if(PS.extras.length){const en=PS.extras.map(eid=>(D.extraToppings||[]).find(x=>x.id===eid)?.name||'').join('، ');dp.push('إضافات: '+en);}
+  cart.push({id:Date.now(),name,details:dp.filter(Boolean).join(' | '),price:bp+ep,qty:PS.qty,emoji:pt.emoji||'🍕'});
+  updateCartUI();closePizzaModal();showToast(name+' أضيفت للسلة 🎉','✅');
 }
+function closePizzaModal(){document.getElementById('pizza-overlay').classList.remove('show');document.body.style.overflow='';}
 
-function closePizzaModal(){
-  document.getElementById('pizza-overlay').classList.remove('show');
-  document.body.style.overflow='';
+// Metro
+let MS={types:[],sauces:[],crust:'pan',isSuper:false},CMB=13;
+function openMetroModal(t){
+  MS={types:[],sauces:[],crust:'pan',isSuper:t==='super'};CMB=t==='super'?19:13;
+  document.getElementById('metro-modal-title').textContent=t==='super'?'سوبر مترو':'بيتزا مترو';
+  document.getElementById('metro-modal-icon').textContent=t==='super'?'🦸🍕':'📏🍕';
+  document.getElementById('metro-modal-desc').textContent=t==='super'?'متر بيتزا + كوكيز + باستا + أوتار':'متر كامل - 3 أنواع + 3 صلصات';
+  const np=(D.pizza||[]).filter(p=>p.id!=='pizzasta');
+  document.getElementById('metro-types-grid').innerHTML=np.map(p=>`<div class="ptype-card" onclick="togMT('${p.id}',this)" id="mt-${p.id}"><div style="font-size:24px;margin-bottom:2px;">${p.emoji||'🍕'}</div><div style="font-weight:700;font-size:10px;line-height:1.2;">${p.name}</div></div>`).join('');
+  document.getElementById('metro-sauces-grid').innerHTML=SAUCES.map(s=>`<div class="crust-btn" onclick="togMS('${s.id}',this)" id="msa-${s.id}">${s.name}</div>`).join('');
+  document.getElementById('metro-crust-pan').classList.add('sel');document.getElementById('metro-crust-stuffed').classList.remove('sel');
+  updMP();document.getElementById('metro-overlay').classList.add('show');document.body.style.overflow='hidden';
 }
-
-// ===================== METRO MODAL =====================
-function openMetroModal(type){
-  metroSel = {types:[],sauces:[],crust:'pan',isSuper:type==='super'};
-  currentMetroBase = type==='super' ? 19 : 13;
-
-  document.getElementById('metro-modal-title').textContent = type==='super' ? 'سوبر مترو' : 'بيتزا مترو';
-  document.getElementById('metro-modal-icon').textContent = type==='super' ? '🦸🍕' : '📏🍕';
-  document.getElementById('metro-modal-desc').textContent = type==='super'
-    ? 'متر بيتزا + كوكيز + باستا ألفريدو + أوتار البطاطا'
-    : 'متر كامل من البيتزا - 3 أنواع + 3 صلصات';
-
-  // Types grid
-  const tg = document.getElementById('metro-types-grid');
-  const nonPizzasta = pizzaTypes.filter(p=>p.id!=='pizzasta');
-  tg.innerHTML = nonPizzasta.map(p=>`
-    <div class="ptype-card" onclick="toggleMetroType('${p.id}',this)" id="mt-${p.id}">
-      <div style="font-size:24px;">${p.emoji}</div>
-      <div style="font-size:10px;font-weight:700;margin-top:2px;line-height:1.2;">${p.name}</div>
-    </div>
-  `).join('');
-
-  // Sauces grid
-  const sg = document.getElementById('metro-sauces-grid');
-  sg.innerHTML = dippingSauces.map(s=>`
-    <div class="crust-btn" onclick="toggleMetroSauce('${s.id}',this)" id="ms-${s.id}">${s.name}</div>
-  `).join('');
-
-  // Reset crust
-  document.getElementById('metro-crust-pan').classList.add('sel');
-  document.getElementById('metro-crust-stuffed').classList.remove('sel');
-
-  updateMetroPrice();
-  document.getElementById('metro-overlay').classList.add('show');
-  document.body.style.overflow='hidden';
-}
-
-function toggleMetroType(id, el){
-  if(metroSel.types.includes(id)){
-    metroSel.types = metroSel.types.filter(x=>x!==id);
-    el.classList.remove('sel');
-  } else {
-    if(metroSel.types.length>=3){ showToast('اختر 3 أنواع فقط','⚠️'); return; }
-    metroSel.types.push(id);
-    el.classList.add('sel');
-  }
-}
-
-function toggleMetroSauce(id, el){
-  if(metroSel.sauces.includes(id)){
-    metroSel.sauces = metroSel.sauces.filter(x=>x!==id);
-    el.classList.remove('sel');
-  } else {
-    if(metroSel.sauces.length>=3){ showToast('اختر 3 صلصات فقط','⚠️'); return; }
-    metroSel.sauces.push(id);
-    el.classList.add('sel');
-  }
-}
-
-function selectMetroCrust(c){
-  metroSel.crust = c;
-  document.getElementById('metro-crust-pan').classList.toggle('sel', c==='pan');
-  document.getElementById('metro-crust-stuffed').classList.toggle('sel', c==='stuffed');
-  updateMetroPrice();
-}
-
-function updateMetroPrice(){
-  const extra = metroSel.crust==='stuffed' ? 4.5 : 0;
-  const total = currentMetroBase + extra;
-  document.getElementById('metro-price').textContent = total.toFixed(2)+' د.أ';
-  document.getElementById('metro-extras-info').textContent = extra>0 ? '+4.50 د.أ للعجينة المحشية' : '';
-}
-
+function togMT(id,el){if(MS.types.includes(id)){MS.types=MS.types.filter(x=>x!==id);el.classList.remove('sel');}else{if(MS.types.length>=3){showToast('اختر 3 أنواع فقط','⚠️');return;}MS.types.push(id);el.classList.add('sel');}}
+function togMS(id,el){if(MS.sauces.includes(id)){MS.sauces=MS.sauces.filter(x=>x!==id);el.classList.remove('sel');}else{if(MS.sauces.length>=3){showToast('اختر 3 صلصات فقط','⚠️');return;}MS.sauces.push(id);el.classList.add('sel');}}
+function selectMetroCrust(c){MS.crust=c;document.getElementById('metro-crust-pan').classList.toggle('sel',c==='pan');document.getElementById('metro-crust-stuffed').classList.toggle('sel',c==='stuffed');updMP();}
+function updMP(){const ex=MS.crust==='stuffed'?4.5:0;document.getElementById('metro-price').textContent=(CMB+ex).toFixed(2)+' د.أ';document.getElementById('metro-extras-info').textContent=ex>0?'+4.50 للمحشية':'';}
 function addMetroToCart(){
-  if(metroSel.types.length!==3){ showToast('اختر 3 أنواع بيتزا بالضبط','⚠️'); return; }
-  if(metroSel.sauces.length!==3){ showToast('اختر 3 صلصات بالضبط','⚠️'); return; }
+  if(MS.types.length!==3){showToast('اختر 3 أنواع بالضبط','⚠️');return;}
+  if(MS.sauces.length!==3){showToast('اختر 3 صلصات بالضبط','⚠️');return;}
+  const ex=MS.crust==='stuffed'?4.5:0;
+  const name=MS.isSuper?'سوبر مترو':'بيتزا مترو';
+  const tn=MS.types.map(t=>(D.pizza||[]).find(p=>p.id===t)?.name||t).join('، ');
+  const sn=MS.sauces.map(s=>SAUCES.find(d=>d.id===s)?.name||s).join('، ');
+  cart.push({id:Date.now(),name,details:tn+' | '+sn,price:CMB+ex,qty:1,emoji:MS.isSuper?'🦸':'📏'});
+  updateCartUI();closeMetroModal();showToast(name+' أضيف للسلة 🎉','✅');
+}
+function closeMetroModal(){document.getElementById('metro-overlay').classList.remove('show');document.body.style.overflow='';}
 
-  const extra = metroSel.crust==='stuffed' ? 4.5 : 0;
-  const total = currentMetroBase + extra;
-  const name = metroSel.isSuper ? 'سوبر مترو' : 'بيتزا مترو';
-  const typeNames = metroSel.types.map(t=>pizzaTypes.find(p=>p.id===t).name).join('، ');
-  const sauceNames = metroSel.sauces.map(s=>dippingSauces.find(d=>d.id===s).name).join('، ');
-
-  cart.push({
-    id: Date.now(),
-    name,
-    details: `${typeNames} | ${sauceNames} | عجينة: ${metroSel.crust==='stuffed'?'محشية':'بان'}`,
-    price: total,
-    qty: 1,
-    emoji: metroSel.isSuper ? '🦸' : '📏',
-  });
-  updateCartUI();
-  closeMetroModal();
-  showToast(`${name} أضيف للسلة 🎉`,'✅');
+// Quick add
+function quickAdd(item){
+  cart.push({id:Date.now(),name:item.name,details:item.desc||'',price:Number(item.price),qty:1,emoji:item.emoji||'🍽️'});
+  updateCartUI();showToast(item.name+' أضيف','✅');
 }
 
-function closeMetroModal(){
-  document.getElementById('metro-overlay').classList.remove('show');
-  document.body.style.overflow='';
-}
-
-// ===================== QUICK ADD (non-pizza items) =====================
-function quickAddToCart(item){
-  cart.push({
-    id: Date.now(),
-    name: item.name,
-    details: item.desc||'',
-    price: item.price,
-    qty: 1,
-    emoji: item.emoji,
-  });
-  updateCartUI();
-  showToast(`${item.name} أضيف للسلة`,'✅');
-}
-
-// ===================== CART UI =====================
+// Cart
+let cart=[];
 function updateCartUI(){
-  const total = cart.reduce((s,i)=>s+i.price*i.qty,0);
-  const count = cart.reduce((s,i)=>s+i.qty,0);
-
-  // Count badges
-  const countEl = document.getElementById('cart-count');
-  const floatCount = document.getElementById('float-count');
-  if(count>0){
-    countEl.textContent=count; countEl.style.display='inline-flex';
-    floatCount.textContent=count; floatCount.style.display='inline-flex';
-    document.getElementById('float-cart-btn').style.display='flex';
-  } else {
-    countEl.style.display='none';
-    floatCount.style.display='none';
-    document.getElementById('float-cart-btn').style.display='none';
-  }
-  document.getElementById('cart-items-count').textContent = count>0 ? `${count} عنصر في السلة` : '';
-
-  // Empty/filled state
-  document.getElementById('cart-empty').style.display = cart.length===0 ? 'block' : 'none';
-  document.getElementById('cart-footer').style.display = cart.length===0 ? 'none' : 'block';
-
-  // Items
-  const list = document.getElementById('cart-items-list');
-  list.innerHTML = cart.map((item,idx)=>`
-    <div class="cart-item-enter" style="background:#F9FAFB;border-radius:12px;padding:12px;display:flex;align-items:start;gap:10px;">
-      <div style="width:44px;height:44px;background:linear-gradient(135deg,#7f1d1d,#CC0000);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">${item.emoji}</div>
+  const total=cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const count=cart.reduce((s,i)=>s+i.qty,0);
+  const cc=document.getElementById('cart-count'),fc=document.getElementById('float-count'),fb=document.getElementById('float-cart-btn');
+  if(count>0){cc.textContent=count;cc.style.display='inline-flex';fc.textContent=count;fc.style.display='inline-flex';fb.style.display='flex';}
+  else{cc.style.display='none';fc.style.display='none';fb.style.display='none';}
+  document.getElementById('cart-items-count').textContent=count>0?`${count} عنصر`:'';
+  document.getElementById('cart-empty').style.display=cart.length===0?'block':'none';
+  document.getElementById('cart-footer').style.display=cart.length===0?'none':'block';
+  document.getElementById('cart-items-list').innerHTML=cart.map((item,idx)=>`
+    <div style="background:#F9FAFB;border-radius:12px;padding:10px;display:flex;align-items:start;gap:8px;">
+      <div style="width:40px;height:40px;background:linear-gradient(135deg,#7f1d1d,var(--red));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">${item.emoji}</div>
       <div style="flex:1;min-width:0;">
-        <div style="font-weight:700;font-size:14px;">${item.name}</div>
-        <div style="font-size:11px;color:#9CA3AF;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${item.details}</div>
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <button class="qty-btn" style="width:28px;height:28px;font-size:14px;" onclick="cartQty(${idx},-1)">−</button>
-            <span style="font-weight:700;font-size:14px;">${item.qty}</span>
-            <button class="qty-btn" style="width:28px;height:28px;font-size:14px;" onclick="cartQty(${idx},1)">+</button>
+        <div style="font-weight:700;font-size:13px;">${item.name}</div>
+        <div style="font-size:10px;color:#9CA3AF;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${item.details}</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px;">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <button class="qty-btn" style="width:26px;height:26px;font-size:13px;" onclick="cq(${idx},-1)">−</button>
+            <span style="font-weight:700;font-size:13px;">${item.qty}</span>
+            <button class="qty-btn" style="width:26px;height:26px;font-size:13px;" onclick="cq(${idx},1)">+</button>
           </div>
-          <div style="font-weight:900;color:#CC0000;font-size:15px;">${(item.price*item.qty).toFixed(2)} د.أ</div>
+          <div style="font-weight:900;color:var(--red);font-size:14px;">${(item.price*item.qty).toFixed(2)} د.أ</div>
         </div>
       </div>
-      <button onclick="removeFromCart(${idx})" style="background:none;border:none;cursor:pointer;color:#9CA3AF;font-size:16px;padding:0;flex-shrink:0;" onmouseover="this.style.color='#CC0000'" onmouseout="this.style.color='#9CA3AF'"><i class="fas fa-trash-alt"></i></button>
-    </div>
-  `).join('');
-
-  // Totals
-  document.getElementById('cart-subtotal').textContent = total.toFixed(2)+' د.أ';
-  document.getElementById('cart-total').textContent = total.toFixed(2)+' د.أ';
+      <button onclick="rc(${idx})" style="background:none;border:none;cursor:pointer;color:#9CA3AF;font-size:14px;flex-shrink:0;" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='#9CA3AF'"><i class="fas fa-trash-alt"></i></button>
+    </div>`).join('');
+  document.getElementById('cart-total').textContent=total.toFixed(2)+' د.أ';
 }
+function cq(i,d){cart[i].qty=Math.max(1,cart[i].qty+d);updateCartUI();}
+function rc(i){cart.splice(i,1);updateCartUI();}
+function openCart(){document.getElementById('cart-panel').classList.add('open');document.getElementById('cart-overlay').classList.add('show');document.body.style.overflow='hidden';}
+function closeCart(){document.getElementById('cart-panel').classList.remove('open');document.getElementById('cart-overlay').classList.remove('show');document.body.style.overflow='';}
 
-function cartQty(idx,d){
-  cart[idx].qty = Math.max(1,cart[idx].qty+d);
-  updateCartUI();
-}
-
-function removeFromCart(idx){
-  cart.splice(idx,1);
-  updateCartUI();
-}
-
-function openCart(){
-  document.getElementById('cart-panel').classList.add('open');
-  document.getElementById('cart-overlay').classList.add('show');
-  document.body.style.overflow='hidden';
-}
-
-function closeCart(){
-  document.getElementById('cart-panel').classList.remove('open');
-  document.getElementById('cart-overlay').classList.remove('show');
-  document.body.style.overflow='';
-}
-
-// ===================== CHECKOUT =====================
+// Checkout
+const AREAS=['عبدون','الصويفية','شارع مكة','خلدا','شميساني','وسط البلد','الرابية','الجبيهة','أبو نصير','ماركا','طارق','أم أذينة','الجاردنز','المقابلين','ضاحية راشد'];
+let CD={f:null,b:null,a:null};
 function openCheckout(){
-  if(cart.length===0){ showToast('السلة فارغة!','⚠️'); return; }
-  closeCart();
-  checkoutData = {fulfillment:null,branch:null,area:null,step:1};
-  goToStep(1);
-  document.getElementById('checkout-overlay').classList.add('show');
-  document.body.style.overflow='hidden';
+  if(!cart.length){showToast('السلة فارغة!','⚠️');return;}
+  closeCart();CD={f:null,b:null,a:null};
+  document.getElementById('areas-grid').innerHTML=AREAS.map(a=>`<div class="sel-card" onclick="selArea('${a}')" id="area-${a}" style="text-align:center;padding:8px;font-size:12px;font-weight:700;">${a}</div>`).join('');
+  goToStep(1);document.getElementById('checkout-overlay').classList.add('show');document.body.style.overflow='hidden';
 }
-
-function closeCheckout(){
-  document.getElementById('checkout-overlay').classList.remove('show');
-  document.body.style.overflow='';
+function closeCheckout(){document.getElementById('checkout-overlay').classList.remove('show');document.body.style.overflow='';}
+function selectFulfillment(t){
+  CD.f=t;CD.b=null;CD.a=null;
+  document.getElementById('pickup-card').classList.toggle('chosen',t==='pickup');
+  document.getElementById('delivery-card').classList.toggle('chosen',t==='delivery');
+  document.getElementById('branch-section').style.display=t==='pickup'?'block':'none';
+  document.getElementById('area-section').style.display=t==='delivery'?'block':'none';
+  document.getElementById('address-field').style.display=t==='delivery'?'block':'none';
 }
-
-function selectFulfillment(type){
-  checkoutData.fulfillment = type;
-  checkoutData.branch = null;
-  checkoutData.area = null;
-  document.getElementById('pickup-card').classList.toggle('chosen',type==='pickup');
-  document.getElementById('delivery-card').classList.toggle('chosen',type==='delivery');
-  document.getElementById('branch-section').style.display = type==='pickup' ? 'block' : 'none';
-  document.getElementById('area-section').style.display = type==='delivery' ? 'block' : 'none';
-  document.getElementById('address-field').style.display = type==='delivery' ? 'block' : 'none';
-}
-
-function selectBranch(b){
-  checkoutData.branch = b;
-  ['madina','tabarbour','radio'].forEach(x=>{
-    document.getElementById('branch-'+x).classList.toggle('chosen',x===b);
-  });
-}
-
-function selectArea(a){
-  checkoutData.area = a;
-  document.querySelectorAll('#areas-grid .sel-card').forEach(el=>el.classList.remove('chosen'));
-  document.getElementById('area-'+a).classList.add('chosen');
-}
-
+function selectBranch(b){CD.b=b;['madina','tabarbour','radio'].forEach(x=>document.getElementById('branch-'+x).classList.toggle('chosen',x===b));}
+function selArea(a){CD.a=a;document.querySelectorAll('#areas-grid .sel-card').forEach(el=>el.classList.remove('chosen'));document.getElementById('area-'+a).classList.add('chosen');}
 function goToStep2(){
-  if(!checkoutData.fulfillment){ showToast('اختر طريقة الاستلام','⚠️'); return; }
-  if(checkoutData.fulfillment==='pickup' && !checkoutData.branch){ showToast('اختر الفرع','⚠️'); return; }
-  if(checkoutData.fulfillment==='delivery' && !checkoutData.area){ showToast('اختر منطقتك','⚠️'); return; }
+  if(!CD.f){showToast('اختر طريقة الاستلام','⚠️');return;}
+  if(CD.f==='pickup'&&!CD.b){showToast('اختر الفرع','⚠️');return;}
+  if(CD.f==='delivery'&&!CD.a){showToast('اختر منطقتك','⚠️');return;}
   goToStep(2);
 }
-
 function goToStep3(){
-  const name = document.getElementById('cust-name').value.trim();
-  const phone = document.getElementById('cust-phone').value.trim();
-  const addr = document.getElementById('cust-address').value.trim();
-  if(!name){ showToast('أدخل اسمك','⚠️'); return; }
-  if(!phone || phone.length<8){ showToast('أدخل رقم هاتف صحيح','⚠️'); return; }
-  if(checkoutData.fulfillment==='delivery' && !addr){ showToast('أدخل عنوانك التفصيلي','⚠️'); return; }
-  buildOrderSummary(name,phone,addr);
+  const n=document.getElementById('cust-name').value.trim();
+  const p=document.getElementById('cust-phone').value.trim();
+  const addr=document.getElementById('cust-address').value.trim();
+  if(!n){showToast('أدخل اسمك','⚠️');return;}
+  if(!p||p.length<8){showToast('أدخل رقم هاتف صحيح','⚠️');return;}
+  if(CD.f==='delivery'&&!addr){showToast('أدخل عنوانك','⚠️');return;}
+  const total=cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const BN={madina:'شارع المدينة المنورة',tabarbour:'طبربور',radio:'شارع الإذاعة'};
+  document.getElementById('order-summary').innerHTML=`<div style="max-height:130px;overflow-y:auto;margin-bottom:8px;">${cart.map(i=>`<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;"><span>${i.emoji} ${i.name} ×${i.qty}</span><span style="font-weight:700;">${(i.price*i.qty).toFixed(2)} د.أ</span></div>`).join('')}</div><div style="border-top:2px solid #E5E7EB;padding-top:8px;display:flex;justify-content:space-between;"><span style="font-weight:800;">الإجمالي</span><span style="font-weight:900;color:var(--red);font-size:16px;">${total.toFixed(2)} د.أ</span></div>`;
+  document.getElementById('order-info-box').innerHTML=`<div style="font-size:12px;display:flex;flex-direction:column;gap:5px;"><div><i class="fas fa-user" style="color:var(--red);width:14px;margin-left:5px;"></i><strong>${n}</strong></div><div><i class="fas fa-phone" style="color:var(--red);width:14px;margin-left:5px;"></i>${p}</div><div><i class="fas fa-${CD.f==='pickup'?'store':'motorcycle'}" style="color:var(--red);width:14px;margin-left:5px;"></i>${CD.f==='pickup'?'استلام: '+BN[CD.b]:'توصيل: '+CD.a}</div>${addr?`<div><i class="fas fa-map-pin" style="color:var(--red);width:14px;margin-left:5px;"></i>${addr}</div>`:''}</div>`;
   goToStep(3);
 }
-
-function buildOrderSummary(name,phone,addr){
-  const total = cart.reduce((s,i)=>s+i.price*i.qty,0);
-  const sum = document.getElementById('order-summary');
-  sum.innerHTML = `
-    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;max-height:160px;overflow-y:auto;">
-      ${cart.map(i=>`
-        <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;">
-          <div>${i.emoji} ${i.name} <span style="color:#9CA3AF;">×${i.qty}</span></div>
-          <div style="font-weight:700;">${(i.price*i.qty).toFixed(2)} د.أ</div>
-        </div>
-      `).join('')}
-    </div>
-    <div style="border-top:2px solid #E5E7EB;padding-top:10px;display:flex;justify-content:space-between;">
-      <span style="font-weight:800;">الإجمالي</span>
-      <span style="font-weight:900;color:#CC0000;font-size:18px;">${total.toFixed(2)} د.أ</span>
-    </div>
-  `;
-
-  const infoBox = document.getElementById('order-info-box');
-  const branchNames = {madina:'شارع المدينة المنورة',tabarbour:'طبربور',radio:'شارع الإذاعة'};
-  infoBox.innerHTML = `
-    <div style="font-size:13px;display:flex;flex-direction:column;gap:6px;">
-      <div><i class="fas fa-user" style="color:#CC0000;width:16px;margin-left:6px;"></i><strong>${name}</strong></div>
-      <div><i class="fas fa-phone" style="color:#CC0000;width:16px;margin-left:6px;"></i>${phone}</div>
-      <div><i class="fas fa-${checkoutData.fulfillment==='pickup'?'store':'motorcycle'}" style="color:#CC0000;width:16px;margin-left:6px;"></i>
-        ${checkoutData.fulfillment==='pickup'?'استلام من فرع '+branchNames[checkoutData.branch]:'توصيل إلى '+checkoutData.area}
-      </div>
-      ${addr?`<div><i class="fas fa-map-pin" style="color:#CC0000;width:16px;margin-left:6px;"></i>${addr}</div>`:''}
-    </div>
-  `;
-}
-
 function goToStep(n){
-  checkoutData.step = n;
   document.querySelectorAll('.checkout-step').forEach(el=>el.classList.remove('active'));
   document.getElementById('step'+n).classList.add('active');
-  [1,2,3].forEach(i=>{
-    const dot = document.getElementById('sdot'+i);
-    dot.className = 'step-dot '+(i<n?'done':i===n?'current':'todo');
-    if(i<3){
-      document.getElementById('sline'+i).className = 'step-line '+(i<n?'done':'todo');
-    }
-  });
+  [1,2,3].forEach(i=>{document.getElementById('sdot'+i).className='step-dot '+(i<n?'done':i===n?'current':'todo');if(i<3)document.getElementById('sline'+i).className='step-line '+(i<n?'done':'todo');});
 }
-
 function confirmOrder(){
-  const eta = checkoutData.fulfillment==='delivery' ? '35-50 دقيقة' : '15-20 دقيقة';
-  document.getElementById('success-eta').textContent = `⏱️ الوقت المتوقع: ${eta}`;
-  closeCheckout();
-  document.getElementById('success-overlay').classList.add('show');
-  cart = [];
-  updateCartUI();
-  document.body.style.overflow='hidden';
+  const eta=CD.f==='delivery'?'35-50 دقيقة':'15-20 دقيقة';
+  document.getElementById('success-eta').textContent='⏱️ الوقت المتوقع: '+eta;
+  closeCheckout();document.getElementById('success-overlay').classList.add('show');
+  cart=[];updateCartUI();document.body.style.overflow='hidden';
 }
+function closeSuccess(){document.getElementById('success-overlay').classList.remove('show');document.body.style.overflow='';}
 
-function closeSuccess(){
-  document.getElementById('success-overlay').classList.remove('show');
-  document.body.style.overflow='';
+function showToast(msg,icon='ℹ️'){
+  const c=document.getElementById('toast-container');
+  const t=document.createElement('div');t.className='toast-msg';
+  t.style.cssText='background:white;border-radius:12px;padding:10px 14px;box-shadow:0 8px 24px rgba(0,0,0,.12);margin-bottom:7px;display:flex;align-items:center;gap:8px;font-weight:700;font-size:12px;border-right:3px solid var(--red);min-width:200px;';
+  t.innerHTML=`<span style="font-size:16px;">${icon}</span><span>${msg}</span>`;
+  c.appendChild(t);setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),300);},2600);
 }
+function scrollToMenu(){document.getElementById('menu-section').scrollIntoView({behavior:'smooth'});}
 
-// ===================== TOAST =====================
-function showToast(msg, icon='ℹ️'){
-  const container = document.getElementById('toast-container');
-  const toast = document.createElement('div');
-  toast.className = 'toast-msg';
-  toast.style.cssText = 'background:white;border-radius:12px;padding:12px 16px;box-shadow:0 8px 24px rgba(0,0,0,.15);margin-bottom:8px;display:flex;align-items:center;gap:10px;font-weight:700;font-size:13px;border-right:4px solid #CC0000;min-width:220px;';
-  toast.innerHTML = `<span style="font-size:18px;">${icon}</span><span>${msg}</span>`;
-  container.appendChild(toast);
-  setTimeout(()=>{ toast.classList.add('out'); setTimeout(()=>toast.remove(),300); },2800);
-}
-
-// ===================== UTILS =====================
-function scrollToMenu(){
-  document.getElementById('menu-section').scrollIntoView({behavior:'smooth'});
-}
-
-// ===================== INIT =====================
 function init(){
-  renderPizzas();
-  renderGrid('appetizers-grid', appetizersData);
-  renderGrid('drinks-grid', drinksData, false, true);
-  renderGrid('desserts-grid', dessertsData);
-  renderGrid('offers-grid', offersData, true);
-  renderAreas();
-  updateCartUI();
-
-  // Show nav menu button after hero
-  window.addEventListener('scroll',()=>{
-    const heroH = document.getElementById('hero').offsetHeight;
-    document.getElementById('nav-menu-btn').style.display = window.scrollY>heroH-100 ? 'flex' : 'none';
-  });
-
-  // Sticky tabs observer
-  const tabBar = document.getElementById('tab-bar');
-  window.addEventListener('scroll',()=>{
-    if(window.scrollY > document.getElementById('hero').offsetHeight - 68){
-      tabBar.style.top = '68px';
-    }
+  const stored=loadD();
+  D=stored||FALLBACK;
+  applyBranding(D.branding);
+  renderAll();updateCartUI();
+  window.addEventListener('storage',e=>{
+    if(e.key==='breshta_data'){try{D=JSON.parse(e.newValue)||FALLBACK;}catch(err){D=FALLBACK;}applyBranding(D.branding);renderAll();}
   });
 }
-
-document.addEventListener('DOMContentLoaded', init);
+document.addEventListener('DOMContentLoaded',init);
 </script>
 </body>
 </html>

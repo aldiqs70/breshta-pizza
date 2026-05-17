@@ -111,7 +111,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--red);outline:none;box
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:8px;">
-      <a href="admin.html" style="color:#9CA3AF;font-size:12px;font-weight:700;text-decoration:none;padding:6px 10px;border-radius:8px;border:1px solid rgba(255,255,255,.1);" onmouseover="this.style.color='white'" onmouseout="this.style.color='#9CA3AF'"><i class="fas fa-cog" style="margin-left:4px;"></i>إدارة</a>
       <button onclick="openCart()" id="cart-btn" style="position:relative;background:linear-gradient(135deg,var(--red),#FF4444);color:white;border:none;border-radius:50px;padding:9px 18px;font-weight:700;font-size:13px;cursor:pointer;font-family:'Cairo',sans-serif;display:flex;align-items:center;gap:6px;box-shadow:0 4px 15px rgba(204,0,0,.4);">
         <i class="fas fa-shopping-cart"></i><span>السلة</span>
         <span id="cart-count" style="display:none;background:var(--accent);color:#1a1a1a;border-radius:50%;width:20px;height:20px;font-size:11px;font-weight:900;align-items:center;justify-content:center;">0</span>
@@ -538,8 +537,8 @@ function renderExtToppings(){
   const list=document.getElementById('extra-toppings-list');
   if(!es.length){sec.style.display='none';return;}
   sec.style.display='block';
-  list.innerHTML=es.map(e=>`<div class="extra-topping-item ${PS.extras.includes(e.id)?'selected':''}" onclick="togExt('${e.id}')">
-    <input type="checkbox" ${PS.extras.includes(e.id)?'checked':''} onclick="event.stopPropagation();">
+  list.innerHTML=es.map(e=>`<div class="extra-topping-item ${PS.extras.includes(e.id)?'selected':''}" onclick="if(event.target.type!=='checkbox')togExt('${e.id}')">
+    <input type="checkbox" ${PS.extras.includes(e.id)?'checked':''} onchange="togExt('${e.id}')">
     <span style="font-size:13px;font-weight:600;flex:1;">${e.name}</span>
     <span style="font-weight:900;color:var(--red);font-size:13px;">+${Number(e.price).toFixed(2)} د.أ</span>
   </div>`).join('');
